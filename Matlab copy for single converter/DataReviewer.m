@@ -59,7 +59,7 @@ if mode == 1
 
         end
         if tx > length(PROBE.ELEMENT_SHAPE) || tx < 1
-            fprintf('Enter a number between 1 and %.0f',length(PROBE.ELEMENT_SHAPE));
+            fprintf('Enter a number between 1 and %.0f \n',length(PROBE.ELEMENT_SHAPE));
             error = 1;
             continue;
         end
@@ -76,7 +76,7 @@ elseif mode == 2
 
         end
         if rx > length(PROBE.ELEMENT_SHAPE) || rx < 1
-            fprintf('Enter a number between 1 and %.0f',length(PROBE.ELEMENT_SHAPE));
+            fprintf('Enter a number between 1 and %.0f \n',length(PROBE.ELEMENT_SHAPE));
             error = 1;
             continue;
         end
