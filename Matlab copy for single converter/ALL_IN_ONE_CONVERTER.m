@@ -18,8 +18,11 @@ MFMC = fn_MFMC_open_file(fname);
 fname_rawdata= '2FRD';
 exp_data = fn_ds_convert(fname_rawdata);
 
+% Commented out the fname_brain line below (line 24) as it seems obsolete
+% now
+
 %Open BRAIN file
-fname_brain = exp_data;
+%fname_brain = exp_data;
 
 
 
