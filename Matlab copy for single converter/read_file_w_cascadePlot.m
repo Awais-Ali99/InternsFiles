@@ -4,7 +4,7 @@
 
 %First create the file then clear everything and restore path to default
 %run('example_create_file');
-fname = 'mfmc_converted.mfmc';
+fname = 'All_in_one_conversion.mfmc';
 clearvars -except fname;
 close all;
 clc;
@@ -46,11 +46,10 @@ FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index)
 
 
 
-% Choose which A-scan to display (tx * rx)
 
-tx = 32;
-i = 0;
-for ascan_index = ((tx-1)*64+1):1:(tx*64)  % e.g. at tx = 32 31*64 will be the last a-scan with tx=31 so we add 1
+tx = 32;  % fixed transmission element
+i = 0;    % set A-scan counter to 0, this tracks which relative A-scan you are on (e.g. 1st,2nd,etc. all the way to 64th)
+for ascan_index = ((tx-1)*64+1):1:(tx*64)  % for loop from first to last A-scan for particular fixed transmitter
     i = i+1; % counter for each ascan
     hold on;
     transmit_law = fn_MFMC_read_law(MFMC, SEQUENCE.TRANSMIT_LAW(ascan_index, :));
@@ -59,17 +58,16 @@ for ascan_index = ((tx-1)*64+1):1:(tx*64)  % e.g. at tx = 32 31*64 will be the l
     disp(transmit_law);
     fprintf('\nReceive law for A-scan %i in sequence %i:\n', ascan_index, sequence_index);
     disp(receive_law);
-    % define x and y gaps:
     
+    % define x and y gaps for cascade plot:
     xGap = 0.0781e-6; 
     yGap = 0.02;
  
     time_pts = size(FRAME, 1);
     time_axis = SEQUENCE.START_TIME + [0: time_pts - 1] * SEQUENCE.TIME_STEP;
-    time_axis = time_axis + xGap*i;
+    time_axis = time_axis + xGap*i; % in each loop shift the time axis by an extra xGap
     amplitude_axis = FRAME(:, ascan_index);
-    amplitude_axis = amplitude_axis + yGap*i;
-    %figure;
+    amplitude_axis = amplitude_axis + yGap*i; % in each loop shift the amplitude by an extra yGap
     plot(time_axis * 1e6, amplitude_axis);
     xlabel('Time (\mus)');
     ylabel('Amplitude (V)');
