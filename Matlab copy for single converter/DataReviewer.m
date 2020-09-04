@@ -54,7 +54,8 @@ if choose == 1 % If A-scans are chosen:
     error = 1;
     if modePlot == 1
         while error == 1 % run loop while input is wrong
-            tx = input('Choose fixed tx: ');
+            inp = inputdlg('Choose fixed Tx: ','Tx',[1 35]);
+            tx = str2num(inp{1});
             if tx ~= floor(tx)  % check if input is an integer
                 fprintf('Please enter an integer \n');
                 error = 1;
@@ -71,7 +72,8 @@ if choose == 1 % If A-scans are chosen:
         fn_MFMC_plotAscans(modePlot,tx,MFMC,SEQUENCE,sequence_index,FRAME);
     elseif modePlot == 2
         while error == 1 % run loop while input is wrong
-            rx = input('Choose fixed rx: ');
+            inp = inputdlg('Choose fixed Rx: ','Rx',[1 35]);
+            rx = str2num(inp{1});
             if rx ~= floor(rx)
                 fprintf('Please enter an integer \n');
                 error = 1;

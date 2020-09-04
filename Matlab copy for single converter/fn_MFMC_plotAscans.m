@@ -1,7 +1,7 @@
 function fn_MFMC_plotAscans(modePlot,el,MFMC,SEQUENCE,sequence_index,FRAME)
 
 i = 0;    % set A-scan counter to 0, this tracks which relative A-scan you are on (e.g. 1st,2nd,etc. all the way to 64th)
-if modePlot == 1
+if modePlot == 1 % FIXED Tx
     for ascan_index = ((el-1)*64+1):1:(el*64)  % for loop from first to last A-scan for particular fixed transmitter
         i = i+1; % counter for each ascan
         hold on;
