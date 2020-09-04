@@ -4,11 +4,11 @@ close all;
 clc;
 
 % Choose which MFMC file to open (either set it at fname or use input) :
-%fname = 'All_in_one_conversion.mfmc';
-fname = input('Enter the name of your .mfmc file: ','s');
-if fname(end-4:end) ~= '.mfmc'  % if input name doesn't end in .mfmc, add it
-    fname = strcat(fname,'.mfmc');
-end
+fname = 'All_in_one_conversion.mfmc';
+%fname = input('Enter the name of your .mfmc file: ','s');
+%if fname(end-4:end) ~= '.mfmc'  % if input name doesn't end in .mfmc, add it
+    %fname = strcat(fname,'.mfmc');
+%end
 
 
 %--------------------------------------------------------------------------
@@ -47,9 +47,9 @@ FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index)
 %
 % 
 %
-mode = menu('What type of data representation do you want?','Rx for fixed Tx','Tx for fixed Rx','Same Tx and Rx');
+modePlot = menu('What type of data representation do you want?','Rx for fixed Tx','Tx for fixed Rx','Same Tx and Rx');
 error = 1;
-if mode == 1
+if modePlot == 1
     while error == 1 % run loop while input is wrong
         tx = input('Choose fixed tx: ');
         if tx ~= floor(tx)  % check if input is an integer
@@ -65,8 +65,8 @@ if mode == 1
         end
         error = 0;
     end
-    fn_MFMC_plotAscans(tx,MFMC,SEQUENCE,sequence_index,FRAME);
-elseif mode == 2
+    fn_MFMC_plotAscans(modePlot,tx,MFMC,SEQUENCE,sequence_index,FRAME);
+elseif modePlot == 2
     while error == 1 % run loop while input is wrong
         rx = input('Choose fixed rx: ');
         if rx ~= floor(rx)
@@ -82,9 +82,11 @@ elseif mode == 2
         end
         error = 0;
     end
-    fn_MFMC_plotAscans(rx,MFMC,SEQUENCE,sequence_index,FRAME);
-elseif mode == 3 % NEED TO FINISH THIS:
-    fprintf('This is unfinished yet \n');
+    fn_MFMC_plotAscans(modePlot,rx,MFMC,SEQUENCE,sequence_index,FRAME);
+elseif modePlot == 3 
+    el = length(PROBE.ELEMENT_SHAPE);
+    fn_MFMC_plotAscans(modePlot,el,MFMC,SEQUENCE,sequence_index,FRAME);
+    
 end
 
 
