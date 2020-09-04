@@ -44,15 +44,19 @@ frame_index = 1;
 FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
 
 %% Set up initial menu to choose what do look at
-choose = menu('Do you want to look at the A-scans or the 3D probe image?', 'A-scans', '3D image');
+choose = questdlg('Do you want to look at the A-scans or the 3D probe image?',...
+'Menu',... 
+'A-scans', '3D Image','A-scans');
 %% Plotting and data review segment:
 %
 % 
 %
-if choose == 1 % If A-scans are chosen:
-    modePlot = menu('What type of data representation do you want?','Rx for fixed Tx','Tx for fixed Rx','Same Tx and Rx');
+if strcmp(choose,'A-scans') == 1 % If A-scans are chosen:
+    modePlot = questdlg('What type of data representation do you want?',...
+	'Choose type: ', ...
+	'Rx for fixed Tx','Tx for fixed Rx','Same Tx and Rx','Rx for fixed Tx');
     error = 1;
-    if modePlot == 1
+    if strcmp(modePlot,'Rx for fixed Tx') == 1
         while error == 1 % run loop while input is wrong
             inp = inputdlg('Choose fixed Tx: ','Tx',[1 35]);
             tx = str2num(inp{1});
@@ -70,7 +74,7 @@ if choose == 1 % If A-scans are chosen:
             error = 0;
         end
         fn_MFMC_plotAscans(modePlot,tx,MFMC,SEQUENCE,sequence_index,FRAME);
-    elseif modePlot == 2
+    elseif strcmp(modePlot,'Tx for fixed Rx') == 1
         while error == 1 % run loop while input is wrong
             inp = inputdlg('Choose fixed Rx: ','Rx',[1 35]);
             rx = str2num(inp{1});
@@ -88,15 +92,14 @@ if choose == 1 % If A-scans are chosen:
             error = 0;
         end
         fn_MFMC_plotAscans(modePlot,rx,MFMC,SEQUENCE,sequence_index,FRAME);
-    elseif modePlot == 3 
+    elseif strcmp(modePlot,'Same Tx and Rx') == 1
         el = length(PROBE.ELEMENT_SHAPE);
         fn_MFMC_plotAscans(modePlot,el,MFMC,SEQUENCE,sequence_index,FRAME);
-
     end
 end
 %% Display 3D Image of Probe:
 %
-if choose == 2 % If 3D image is chosen
+if strcmp(choose,'3D Image') == 1 % If 3D image is chosen
     fn_3D_image_plot(PROBE);
 end
 
