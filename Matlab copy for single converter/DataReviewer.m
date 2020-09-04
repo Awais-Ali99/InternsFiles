@@ -1,4 +1,4 @@
-%% Script to read and review MFMC data:
+%% DATA REVIEWER SCRIPT
 clear all;
 close all;
 clc;
@@ -43,51 +43,58 @@ disp(SEQUENCE);
 frame_index = 1;
 FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
 
+%% Set up initial menu to choose what do look at
+choose = menu('Do you want to look at the A-scans or the 3D probe image?', 'A-scans', '3D image');
 %% Plotting and data review segment:
 %
 % 
 %
-modePlot = menu('What type of data representation do you want?','Rx for fixed Tx','Tx for fixed Rx','Same Tx and Rx');
-error = 1;
-if modePlot == 1
-    while error == 1 % run loop while input is wrong
-        tx = input('Choose fixed tx: ');
-        if tx ~= floor(tx)  % check if input is an integer
-            fprintf('Please enter an integer \n');
-            error = 1;
-            continue;
+if choose == 1 % If A-scans are chosen:
+    modePlot = menu('What type of data representation do you want?','Rx for fixed Tx','Tx for fixed Rx','Same Tx and Rx');
+    error = 1;
+    if modePlot == 1
+        while error == 1 % run loop while input is wrong
+            tx = input('Choose fixed tx: ');
+            if tx ~= floor(tx)  % check if input is an integer
+                fprintf('Please enter an integer \n');
+                error = 1;
+                continue;
 
+            end
+            if tx > length(PROBE.ELEMENT_SHAPE) || tx < 1
+                fprintf('Enter a number between 1 and %.0f \n',length(PROBE.ELEMENT_SHAPE));
+                error = 1;
+                continue;
+            end
+            error = 0;
         end
-        if tx > length(PROBE.ELEMENT_SHAPE) || tx < 1
-            fprintf('Enter a number between 1 and %.0f \n',length(PROBE.ELEMENT_SHAPE));
-            error = 1;
-            continue;
-        end
-        error = 0;
-    end
-    fn_MFMC_plotAscans(modePlot,tx,MFMC,SEQUENCE,sequence_index,FRAME);
-elseif modePlot == 2
-    while error == 1 % run loop while input is wrong
-        rx = input('Choose fixed rx: ');
-        if rx ~= floor(rx)
-            fprintf('Please enter an integer \n');
-            error = 1;
-            continue;
+        fn_MFMC_plotAscans(modePlot,tx,MFMC,SEQUENCE,sequence_index,FRAME);
+    elseif modePlot == 2
+        while error == 1 % run loop while input is wrong
+            rx = input('Choose fixed rx: ');
+            if rx ~= floor(rx)
+                fprintf('Please enter an integer \n');
+                error = 1;
+                continue;
 
+            end
+            if rx > length(PROBE.ELEMENT_SHAPE) || rx < 1
+                fprintf('Enter a number between 1 and %.0f \n',length(PROBE.ELEMENT_SHAPE));
+                error = 1;
+                continue;
+            end
+            error = 0;
         end
-        if rx > length(PROBE.ELEMENT_SHAPE) || rx < 1
-            fprintf('Enter a number between 1 and %.0f \n',length(PROBE.ELEMENT_SHAPE));
-            error = 1;
-            continue;
-        end
-        error = 0;
+        fn_MFMC_plotAscans(modePlot,rx,MFMC,SEQUENCE,sequence_index,FRAME);
+    elseif modePlot == 3 
+        el = length(PROBE.ELEMENT_SHAPE);
+        fn_MFMC_plotAscans(modePlot,el,MFMC,SEQUENCE,sequence_index,FRAME);
+
     end
-    fn_MFMC_plotAscans(modePlot,rx,MFMC,SEQUENCE,sequence_index,FRAME);
-elseif modePlot == 3 
-    el = length(PROBE.ELEMENT_SHAPE);
-    fn_MFMC_plotAscans(modePlot,el,MFMC,SEQUENCE,sequence_index,FRAME);
-    
 end
-
-
+%% Display 3D Image of Probe:
+%
+if choose == 2 % If 3D image is chosen
+    fn_3D_image_plot(PROBE);
+end
 
