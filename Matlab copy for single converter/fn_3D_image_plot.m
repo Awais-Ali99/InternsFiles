@@ -25,6 +25,7 @@ for el = 1:num_el
     Y = [p1(2) p2(2) p3(2) p4(2)];
     Z = [p1(3) p2(3) p3(3) p4(3)];
     patch(X, Y, Z);
+    
 end
 
 % draw the probe itself:
@@ -39,7 +40,9 @@ PROBE_P4 = [x-PROBE.ELEMENT_MINOR(1) y-PROBE.ELEMENT_MAJOR(2) PROBE_HEIGHT];
 X = [PROBE_P1(1) PROBE_P2(1) PROBE_P3(1) PROBE_P4(1) PROBE_P1(1)];
 Y = [PROBE_P1(2) PROBE_P2(2) PROBE_P3(2) PROBE_P4(2) PROBE_P1(2)];
 Z = [PROBE_P1(3) PROBE_P2(3) PROBE_P3(3) PROBE_P4(3) PROBE_P1(3)];
-plot3(X,Y,Z,'k');
+s1 = patch(X,Y,Z,'black');
+% make side mostly translucent
+alpha(s1,0.05);
 
 %Side 2:
 x1 = PROBE.ELEMENT_POSITION(1,1);
@@ -53,7 +56,8 @@ PROBE_P4 = [x1-PROBE.ELEMENT_MINOR(1) y-PROBE.ELEMENT_MAJOR(2) PROBE_HEIGHT];
 X = [PROBE_P1(1) PROBE_P2(1) PROBE_P3(1) PROBE_P4(1) PROBE_P1(1)];
 Y = [PROBE_P1(2) PROBE_P2(2) PROBE_P3(2) PROBE_P4(2) PROBE_P1(2)];
 Z = [PROBE_P1(3) PROBE_P2(3) PROBE_P3(3) PROBE_P4(3) PROBE_P1(3)];
-plot3(X,Y,Z,'k');
+s2 = patch(X,Y,Z,'black');
+alpha(s2,0.05);
 
 
 
@@ -69,7 +73,8 @@ PROBE_P4 = [x1-PROBE.ELEMENT_MINOR(1) y+PROBE.ELEMENT_MAJOR(2) PROBE_HEIGHT];
 X = [PROBE_P1(1) PROBE_P2(1) PROBE_P3(1) PROBE_P4(1) PROBE_P1(1)];
 Y = [PROBE_P1(2) PROBE_P2(2) PROBE_P3(2) PROBE_P4(2) PROBE_P1(2)];
 Z = [PROBE_P1(3) PROBE_P2(3) PROBE_P3(3) PROBE_P4(3) PROBE_P1(3)];
-plot3(X,Y,Z,'k');
+s3 = patch(X,Y,Z,'black');
+alpha(s3,0.05);
 
 % Side 4:
 x = PROBE.ELEMENT_POSITION(1,num_el);
@@ -82,7 +87,8 @@ PROBE_P4 = [x+PROBE.ELEMENT_MINOR(1) y-PROBE.ELEMENT_MAJOR(2) PROBE_HEIGHT];
 X = [PROBE_P1(1) PROBE_P2(1) PROBE_P3(1) PROBE_P4(1) PROBE_P1(1)];
 Y = [PROBE_P1(2) PROBE_P2(2) PROBE_P3(2) PROBE_P4(2) PROBE_P1(2)];
 Z = [PROBE_P1(3) PROBE_P2(3) PROBE_P3(3) PROBE_P4(3) PROBE_P1(3)];
-plot3(X,Y,Z,'k');
-
+s4 = patch(X,Y,Z,'black');
+alpha(s4,0.05);
 hold off
+
 end
