@@ -1,25 +1,14 @@
 clc
 clear
-
-%SUMMARY
-%   Example of reading from an MFMC structure in an HDF5 file. File is
-%   created first by executing 'example_create_file.m'.
-
-%First create the file then clear everything and restore path to default
-%run('example_create_file'); 
-%clearvars -except fname;
-%close all;
-%clc;
-%restoredefaultpath;
-
+%
 %--------------------------------------------------------------------------
-%Open the file and obtain Matlab MFMC structure variable for use in later
+%%Open the file and obtain Matlab MFMC structure variable for use in later
 %functions
 fname1 = 'All_in_one_conversion.mfmc';
 fname2 = 'All_in_one_conversion.mfmc';
 
-%--------------------------------------------------------------------------
-%PROBE 1 READING
+%-------------------------------------------------------------------------
+%% PROBE 1 READING
 
 MFMC = fn_MFMC_open_file(fname1);
 
@@ -48,7 +37,7 @@ SEQUENCE1.RECEIVE_LAW = int64(SEQUENCE1.RECEIVE_LAW)
 SEQUENCE1.TRANSMIT_LAW = int64(SEQUENCE1.TRANSMIT_LAW)
 
 %----------------------------------------------------------------------------------
-%PROBE 2 READING
+%% PROBE 2 READING
 
 MFMC = fn_MFMC_open_file(fname2);
 
@@ -79,11 +68,13 @@ SEQUENCE2.RECEIVE_LAW = int64(SEQUENCE2.RECEIVE_LAW)
 SEQUENCE2.TRANSMIT_LAW = int64(SEQUENCE2.TRANSMIT_LAW)
 
 %-------------------------------------------------------------------------------------
+%% Set up initial menu to choose what do look at
+choose = questdlg('Do you want to perform a full comparison of the MFMC files or to compare the MFMC Data only?',...
+'Menu', 'Full Comparison','MFMC-DATA', 'Cancel');
 
-%Comparison Section
-
-%PROBE CHECK
-
+%% Comparison Section
+if strcmp(choose,'Full Comparison') == 1 % If Full Comparison is chosen:
+% PROBE CHECK
 error_flag_p = 0;
 
 %PROBE COMPARISON
@@ -130,8 +121,7 @@ else
 end
 
 %----------------------------------------------------------------------------------------
-
-%Sequence Check
+% Sequence Check
 
 error_flag_s = 0;
 
@@ -213,9 +203,16 @@ else
 end
 
 %-------------------------------------------------------------------------
-%Frame Check
+% Frame Check
 if FRAME1(:) == FRAME2 (:);
 fprintf('FRAME Verificaton PASS\n');
 end
-
-
+end
+%---------------------------------------------------------------------------
+%% MFMC_DATA Section
+if strcmp(choose,'MFMC-DATA') == 1 % If only MFMC comparison is chosen:
+    % Frame Check
+if FRAME1(:) == FRAME2 (:);
+fprintf('FRAME Verificaton PASS\n');
+end
+end
