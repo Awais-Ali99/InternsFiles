@@ -18,7 +18,7 @@ fprintf('  Probes:\n');
 for ii = 1:length(probe_list)
     fprintf(['    ', probe_list{ii}.name, '\n']);
 end
-fprintf('  Seqeunces:\n');
+fprintf('  Sequences:\n');
 for ii = 1:length(sequence_list)
     fprintf(['    ', sequence_list{ii}.name, '\n']);
 end
