@@ -26,7 +26,18 @@ function [PROBE]=fn_MFMC_helper_brain_array_to_probe(array,varargin)
         % Assumed rectangular
         PROBE.ELEMENT_SHAPE = ones(1, length(array.el_xc));  %1 is rectangular
     end
-    
+
+    PROBE.WEDGE_ANGLE = array.wedge.wedge_angle;
+    PROBE.WEDGE_ROOF_ANGLE = array.wedge.roof_angle;
+    PROBE.WEDGE_VELOCITY = array.wedge.velocity;
+    PROBE.WEDGE_LENGTH = array.wedge.length;
+    PROBE.WEDGE_WIDTH = array.wedge.width;
+    PROBE.WEDGE_HEIGHT = array.wedge.height;
+    PROBE.WEDGE_EL_POS_X = array.wedge.Elem1_Pos_X;
+    PROBE.WEDGE_EL_POS_Y = array.wedge.Elem1_Pos_Y;
+    PROBE.WEDGE_EL_POS_Z = array.wedge.Elem1_Pos_Z;
+    PROBE.WEDGE_POS_X = array.wedge.Elem1_Wedge_Pos_X;
+    PROBE.WEDGE_POS_Y = array.wedge.Elem1_Wedge_Pos_Y;
     
     
 end
