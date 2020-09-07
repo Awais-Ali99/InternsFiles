@@ -3,12 +3,8 @@ clear all;
 close all;
 clc;
 
-% Choose which MFMC file to open (either set it at fname or use input) :
-fname = 'All_in_one_conversion.mfmc';
-%fname = input('Enter the name of your .mfmc file: ','s');
-%if fname(end-4:end) ~= '.mfmc'  % if input name doesn't end in .mfmc, add it
-    %fname = strcat(fname,'.mfmc');
-%end
+% Choose which MFMC file to open:
+fname = uigetfile('*.mfmc');
 
 
 %--------------------------------------------------------------------------
@@ -22,7 +18,7 @@ fprintf('  Probes:\n');
 for ii = 1:length(probe_list)
     fprintf(['    ', probe_list{ii}.name, '\n']);
 end
-fprintf('  Seqeunces:\n');
+fprintf('  Sequences:\n');
 for ii = 1:length(sequence_list)
     fprintf(['    ', sequence_list{ii}.name, '\n']);
 end
