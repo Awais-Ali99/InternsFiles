@@ -1,12 +1,12 @@
 function fn_3D_image_plot (PROBE)
 
 num_el = length(PROBE.ELEMENT_SHAPE);
-if PROBE.ELEMENT_MAJOR == [0 0 0]
-PROBE.ELEMENT_MAJOR = [ 0 0.005 0];
-end
+PROBE.ELEMENT_MAJOR = [0 0.005 0];
+PROBE.ELEMENT_MINOR = [2e-4; 0; 0];
 PROBE_HEIGHT = 2;
 grid on
 axis([-0.02 0.02 -0.01 0.01 0 2.5])
+
 
 % For each element
 for el = 1:num_el
