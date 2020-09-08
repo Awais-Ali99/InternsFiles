@@ -1,7 +1,6 @@
 function fn_3D_image_plot (PROBE,num_el)
 
 
-
 PROBE.ELEMENT_MAJOR = [0 0.005 0];
 % Minor dimension is half of the width, i.e. from the centre of element to
 % the end, so creating seperate variable (_half)
