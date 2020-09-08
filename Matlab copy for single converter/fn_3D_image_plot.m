@@ -1,6 +1,7 @@
-function fn_3D_image_plot (PROBE)
+function fn_3D_image_plot (PROBE,num_el)
 
-num_el = length(PROBE.ELEMENT_SHAPE);
+
+
 PROBE.ELEMENT_MAJOR = [0 0.005 0];
 % Minor dimension is half of the width, i.e. from the centre of element to
 % the end, so creating seperate variable (_half)
@@ -10,11 +11,34 @@ PROBE.ELEMENT_MINOR_HALF(1,1) = PROBE.ELEMENT_MINOR_HALF(1,1) - (0.5e-4); %Accou
 PROBE_HEIGHT = 2;
 grid on
 axis([-0.02 0.02 -0.01 0.01 0 2.5])
+hold on,
+
+
+%for wedge
+
+%centre of wedge found my avg of first and last dimensions of elements
+centre_x_w =  (PROBE.ELEMENT_POSITION(1,1)+ PROBE.ELEMENT_POSITION(1,num_el))/2;
+centre_x_y =  (PROBE.ELEMENT_POSITION(2,1)+ PROBE.ELEMENT_POSITION(2,num_el))/2;
+z_w = PROBE.WEDGE_HEIGHT;
+
+%points to define the coordinates of the wedge
+ p1 = [centre_x_w-(PROBE.WEDGE_LENGTH/2) centre_x_y-(PROBE.WEDGE_WIDTH/2) z_w];
+ p2 = [centre_x_w+(PROBE.WEDGE_LENGTH/2) centre_x_y-(PROBE.WEDGE_WIDTH/2) z_w];
+ p3 = [centre_x_w+(PROBE.WEDGE_LENGTH/2) centre_x_y+(PROBE.WEDGE_WIDTH/2) z_w];
+ p4 = [centre_x_w-(PROBE.WEDGE_LENGTH/2) centre_x_y+(PROBE.WEDGE_WIDTH/2) z_w];
+
+%wedge angle not needed as the z component for p3 and p4 wil change with the
+%introduction of an angle introducing the slope
+ 
+X = [p1(1) p2(1) p3(1) p4(1)];
+Y = [p1(2) p2(2) p3(2) p4(2)];
+Z = [p1(3) p2(3) p3(3) p4(3)];
+patch (X, Y, Z, 'r'); %wedge in red
 
 
 % For each element
 for el = 1:num_el
-    hold on;
+    
     % location of centre of each element:
     x = PROBE.ELEMENT_POSITION(1,el);
     y = PROBE.ELEMENT_POSITION(2,el);
@@ -33,6 +57,7 @@ for el = 1:num_el
     patch(X, Y, Z);
     
 end
+
 
 % draw the probe itself:
 % Side 1:

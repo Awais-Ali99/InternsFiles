@@ -38,6 +38,8 @@ disp(SEQUENCE);
 % Get first frame of data
 frame_index = 1;
 FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
+% Get number of elements
+num_el = length(PROBE.ELEMENT_SHAPE);
 
 %% Set up initial menu to choose what do look at
 choose = questdlg('Do you want to look at the A-scans or the 3D probe image?',...
@@ -69,7 +71,7 @@ if strcmp(choose,'A-scans') == 1 % If A-scans are chosen:
             end
             error = 0;
         end
-        fn_MFMC_plotAscans(modePlot,tx,MFMC,SEQUENCE,sequence_index,FRAME);
+        fn_MFMC_plotAscans(modePlot,num_el,tx,MFMC,SEQUENCE,sequence_index,FRAME);
     elseif strcmp(modePlot,'Tx for fixed Rx') == 1
         while error == 1 % run loop while input is wrong
             inp = inputdlg('Choose fixed Rx: ','Rx',[1 35]);
@@ -87,15 +89,15 @@ if strcmp(choose,'A-scans') == 1 % If A-scans are chosen:
             end
             error = 0;
         end
-        fn_MFMC_plotAscans(modePlot,rx,MFMC,SEQUENCE,sequence_index,FRAME);
+        fn_MFMC_plotAscans(modePlot,num_el,rx,MFMC,SEQUENCE,sequence_index,FRAME);
     elseif strcmp(modePlot,'Same Tx and Rx') == 1
         el = length(PROBE.ELEMENT_SHAPE);
-        fn_MFMC_plotAscans(modePlot,el,MFMC,SEQUENCE,sequence_index,FRAME);
+        fn_MFMC_plotAscans(modePlot,num_el,el,MFMC,SEQUENCE,sequence_index,FRAME);
     end
 end
 %% Display 3D Image of Probe:
 %
 if strcmp(choose,'3D Image') == 1 % If 3D image is chosen
-    fn_3D_image_plot(PROBE);
+    fn_3D_image_plot(PROBE,num_el);
 end
 

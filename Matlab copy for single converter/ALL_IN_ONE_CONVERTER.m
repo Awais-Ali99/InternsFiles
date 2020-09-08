@@ -2,7 +2,7 @@
 close all; clear all; clc;
 
 %Name of MFMC file to create
-fname = 'All_in_one_conversion.mfmc';
+fname = 'wedge_converted.mfmc';
 
 if exist(fname, 'file')
      delete(fname);

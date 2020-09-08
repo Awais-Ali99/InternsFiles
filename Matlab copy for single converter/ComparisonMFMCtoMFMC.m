@@ -5,7 +5,7 @@ clear
 %%Open the file and obtain Matlab MFMC structure variable for use in later
 %functions
 fname1 = 'All_in_one_conversion.mfmc';
-fname2 = 'All_in_one_conversion.mfmc';
+fname2 = 'DLtestI16_2020-08-26.mfmc';
 
 %-------------------------------------------------------------------------
 %% PROBE 1 READING

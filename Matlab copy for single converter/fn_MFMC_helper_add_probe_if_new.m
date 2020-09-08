@@ -27,6 +27,8 @@ function [PROBE_candidate]=fn_MFMC_helper_add_probe_if_new(MFMC,PROBE_candidate)
         end
         if (max(abs(PROBE.ELEMENT_SHAPE(:)-PROBE_candidate.ELEMENT_SHAPE(:))) > 0)
             continue;
+            
+            
         end
 
         disp(['Probe matched at index ',num2str(i)])

@@ -20,6 +20,7 @@ if isempty(data)
     obj = [];
 else
     obj = data.(name);
+    
 end
 
 %If type not specified, class(data.(name)) is used
