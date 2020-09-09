@@ -51,6 +51,14 @@ for jj=1:length(sections)
             locs(jj)=count;
             for ii=1:need_fields(jj)
                 cfg_dat{tot_count,1}=dataArray{1}{locs(jj)+ii};
+                k = 2;
+                % In order to get the value corresponding to the data, find
+                % the column with = sign then read value from the next
+                % column
+                while (dataArray{k}{locs(jj)+ii}) ~= '='
+                    k = k+1;
+                end
+                cfg_dat{tot_count,2}=dataArray{k+1}{locs(jj)+ii};
                 cfg_dat{tot_count,2}=dataArray{4}{locs(jj)+ii};
                 tot_count=tot_count+1;
             end
