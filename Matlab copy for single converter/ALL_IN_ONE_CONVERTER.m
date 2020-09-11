@@ -2,7 +2,7 @@
 close all; clear all; clc;
 
 %Name of MFMC file to create
-fname = 'wedge_converted.mfmc';
+fname = 'laser_converted.mfmc';
 
 if exist(fname, 'file')
      delete(fname);
@@ -16,13 +16,17 @@ MFMC = fn_MFMC_open_file(fname);
 %Load raw data to brain function (fn_ds)
 %File loaded as required test file
 fname_rawdata= '2FRD';
-exp_data = fn_ds_convert(fname_rawdata);
+fname_laser = '130320_Aluminium_FMC_LIPA';
+dataType = questdlg('What type of data do you want to convert? ',...
+'Menu',... 
+'Ultrasound (from .png and .cfg)', 'Laser (from .mat)','Ultrasound (from .png and .cfg)');   
 
-% Commented out the fname_brain line below (line 24) as it seems obsolete
-% now
+if strcmp(dataType,'Ultrasound (from .png and .cfg)') == 1
+    exp_data = fn_ds_convert(fname_rawdata);
+elseif strcmp(dataType,'Laser (from .mat)') == 1
+    exp_data = fn_laser_convert(fname_laser); % if you want to specify ph_vel add it as input to fn
+end 
 
-%Open BRAIN file
-%fname_brain = exp_data;
 
 
 
@@ -33,7 +37,8 @@ exp_data = fn_ds_convert(fname_rawdata);
 [PROBE]=fn_MFMC_helper_add_probe_if_new(MFMC,PROBE);
 %% SEQUENCE / Focal laws
 % Convert exp_data focal law to MFMC Sequence
-[SEQUENCE]=fn_MFMC_helper_brain_exp_data_to_sequence(exp_data,PROBE);
+% If you want to specify longitudinal and shear velocity do it in (exp_data,PROBE,...) 
+[SEQUENCE]=fn_MFMC_helper_brain_exp_data_to_sequence(exp_data,PROBE,6300,3200);
 % Add sequence if new
 [SEQUENCE]=fn_MFMC_helper_add_sequence_if_new(MFMC,SEQUENCE);
 %% FRAME
