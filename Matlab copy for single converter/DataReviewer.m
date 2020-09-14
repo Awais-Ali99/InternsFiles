@@ -4,7 +4,7 @@ close all;
 clc;
 
 % Choose which MFMC file to open:
-fname = 'DAVEWEDGEFIX.mfmc' %uigetfile('*.mfmc');
+fname = uigetfile('*.mfmc');
 
 
 %--------------------------------------------------------------------------
@@ -97,13 +97,15 @@ if strcmp(choose,'A-scans') == 1 % If A-scans are chosen:
     elseif strcmp(modePlot,'Same Tx and Rx') == 1
         el = length(PROBE.ELEMENT_SHAPE);
     end
+    
+    
 % Set up initial X and Y gaps for cascade plot
 
 xGap = 0.0781e-6;
 yGap = 0.02;
 % Infinite loop that restarts itself whenever the button to change gaps is
 % pressed
-while true
+while true  
     clf;
     % call plotting function
     fn_MFMC_plotAscans(xGap,yGap,modePlot,num_el,el,MFMC,SEQUENCE,sequence_index,FRAME);
@@ -121,6 +123,7 @@ while true
     button1.Position = [30 670 100 20];
     button2.Position = [30 615 100 20];
     button3.Position = [30 560 100 20];
+    
     drawnow;
     %
     %
@@ -128,8 +131,11 @@ while true
     while true
         drawnow;
         % If button is pressed restart the outside loop (to input new gaps)
-        if (get(button3, 'Value')==1); break; end
+        if (get(button3, 'Value')==1)
+            break;
+        end
     end
+
     % Two if statements to check revert to default if no input is given
     % for the X and Y Gaps
     if (isempty(get(button1, 'String')) == 1)
@@ -143,9 +149,13 @@ while true
     else
         yGap = str2num((get(button2, 'String')));
     end
+drawnow;
+
 end
 pause(0.01);
+
 end
+
 
 %% Display 3D Image of Probe:
 %
