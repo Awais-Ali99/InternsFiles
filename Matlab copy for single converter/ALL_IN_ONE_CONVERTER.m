@@ -2,7 +2,7 @@
 close all; clear all; clc;
 
 %Name of MFMC file to create
-fname = 'laser_converted.mfmc';
+fname = 'try.mfmc';
 
 if exist(fname, 'file')
      delete(fname);
