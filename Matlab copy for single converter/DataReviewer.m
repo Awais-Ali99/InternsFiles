@@ -3,48 +3,52 @@ clear all;
 close all;
 clc;
 
-% Choose which MFMC file to open:
-fname = uigetfile('*.mfmc');
-
-
-%--------------------------------------------------------------------------
-% Open the MFMC file:
-MFMC = fn_MFMC_open_file(fname);
-
-%Get lists of probes and sequences in file
-[probe_list, sequence_list] = fn_MFMC_get_probe_and_sequence_refs(MFMC);
-fprintf('File contains %i probes and %i sequences\n', length(probe_list), length(sequence_list));
-fprintf('  Probes:\n');
-for ii = 1:length(probe_list)
-    fprintf(['    ', probe_list{ii}.name, '\n']);
-end
-fprintf('  Sequences:\n');
-for ii = 1:length(sequence_list)
-    fprintf(['    ', sequence_list{ii}.name, '\n']);
-end
-%% 
-% Choose which probe to read:
-probe_index = 1;
-PROBE = fn_MFMC_read_probe(MFMC, probe_list{probe_index}.ref);
-fprintf('\nProbe %i details:\n', probe_index);
-disp(PROBE);
-
-% Choose which sequence to read:
-sequence_index = 1;
-SEQUENCE = fn_MFMC_read_sequence(MFMC, sequence_list{sequence_index}.ref);
-fprintf('\nSequence %i details:\n', sequence_index);
-disp(SEQUENCE);
-
-% Choose which frame to read
-frame_index = 1;
-FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
-% Get number of elements
-num_el = length(PROBE.ELEMENT_SHAPE);
 
 %% Set up initial menu to choose what do look at
 choose = questdlg('Do you want to look at the A-scans or the 3D probe image or Compare your MFMC files?',...
 'Menu',... 
 'A-scans', '3D Image', 'MFMC file Comparison', 'dnf');
+%% Load file:
+% For A-scans and 3D image load the MFMC file you want (for MFMC comparison
+% skip to end)
+if (strcmp(choose,'A-scans') || strcmp(choose,'3D Image'))
+    % Choose which file to open:
+    fname = uigetfile('*.mfmc');
+
+    % Open the MFMC file:
+    MFMC = fn_MFMC_open_file(fname);
+
+    %Get lists of probes and sequences in file
+    [probe_list, sequence_list] = fn_MFMC_get_probe_and_sequence_refs(MFMC);
+    fprintf('File contains %i probes and %i sequences\n', length(probe_list), length(sequence_list));
+    fprintf('  Probes:\n');
+    for ii = 1:length(probe_list)
+        fprintf(['    ', probe_list{ii}.name, '\n']);
+    end
+    fprintf('  Sequences:\n');
+    for ii = 1:length(sequence_list)
+        fprintf(['    ', sequence_list{ii}.name, '\n']);
+    end
+
+    % Choose which probe to read:
+    probe_index = 1;
+    PROBE = fn_MFMC_read_probe(MFMC, probe_list{probe_index}.ref);
+    fprintf('\nProbe %i details:\n', probe_index);
+    disp(PROBE);
+
+    % Choose which sequence to read:
+    sequence_index = 1;
+    SEQUENCE = fn_MFMC_read_sequence(MFMC, sequence_list{sequence_index}.ref);
+    fprintf('\nSequence %i details:\n', sequence_index);
+    disp(SEQUENCE);
+
+    % Choose which frame to read
+    frame_index = 1;
+    FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
+    % Get number of elements
+    num_el = length(PROBE.ELEMENT_SHAPE);
+end
+
 %% Plotting and data review segment:
 %
 % 
@@ -52,7 +56,7 @@ choose = questdlg('Do you want to look at the A-scans or the 3D probe image or C
 %
 %
 
-if strcmp(choose,'A-scans') == 1 % If A-scans are chosen:
+if strcmp(choose,'A-scans') % If A-scans are chosen:
     modePlot = questdlg('What type of data representation do you want?',...
     'Choose type: ', ...
     'Rx for fixed Tx','Tx for fixed Rx','Same Tx and Rx','Rx for fixed Tx');
@@ -162,7 +166,7 @@ end
 %
 %
 %
-if strcmp(choose,'3D Image') == 1 % If 3D image is chosen
+if strcmp(choose,'3D Image') % If 3D image is chosen
     fn_3D_image_plot_new(PROBE,num_el);
 end
 
@@ -172,13 +176,13 @@ end
 %
 %%Open the file and obtain Matlab MFMC structure variable for use in later
 %functions
-if strcmp(choose,'MFMC file Comparison') == 1 % If MFMC File Comparison are chosen:
-clc
-clear
+if strcmp(choose,'MFMC file Comparison') % If MFMC File Comparison are chosen:
+    clc
+    clear
 
-%Selected both files you want to compare    
-fname1 = 'wedge_converted.mfmc';
-fname2 = 'wedge_converted.mfmc'; %'COMPARE_LABVIEW.mfmc';
+    %Selected both files you want to compare    
+    fname1 = uigetfile('*.mfmc');
+    fname2 = uigetfile('*.mfmc'); %'COMPARE_LABVIEW.mfmc';
 
-fn_ComparisonMFMCtoMFMC (fname1,fname2)
+    fn_ComparisonMFMCtoMFMC (fname1,fname2)
 end
