@@ -54,24 +54,6 @@ fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_MANUFACTURER'],   'O
 fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_SERIAL_NUMBER'],  'O', 'A');
 fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_TAG'],            'O', 'A');
 
-% optional attributes for wedge (based on .cfg file from FIToolbox)
-fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_ANGLE'],          'O', 'D');
-fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_ROOF ANGLE'],     'O', 'D');
-fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_VELOCITY'],       'O', 'D');
-fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_LENGTH'],         'O', 'D');
-fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_WIDTH'],          'O', 'D');
-fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_HEIGHT'],         'O', 'D');
-fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_EL_POS_X'],       'O', 'D');
-fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_EL_POS_Y'],       'O', 'D');
-fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_EL_POS_Z'],       'O', 'D');
-fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_POS_X'],          'O', 'D');
-fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'WEDGE_POS_Y'],          'O', 'D');
-
-
-
-
-
-
 %optional datasets
 fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'ELEMENT_RADIUS_OF_CURVATURE'],  'O', 'D');
 fn_hdf5_create_entry(PROBE, MFMC.fname, [probe_path, 'ELEMENT_AXIS_OF_CURVATURE'],    'O', 'D');

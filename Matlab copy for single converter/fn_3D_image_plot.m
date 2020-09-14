@@ -6,11 +6,12 @@ PROBE.ELEMENT_MAJOR = [0 0.005 0];
 % the end, so creating seperate variable (_half)
 
 PROBE.ELEMENT_MINOR_HALF = PROBE.ELEMENT_MINOR/2;
-PROBE.ELEMENT_MINOR_HALF(1,1) = PROBE.ELEMENT_MINOR_HALF(1,1) - (0.5e-4); %Accounting for pitch can be adjusted
+%PROBE.ELEMENT_MINOR_HALF(1,1) = PROBE.ELEMENT_MINOR_HALF(1,1) - (0.5e-4); %Accounting for pitch can be adjusted
 PROBE_HEIGHT = 2;
 grid on
 axis([-0.02 0.02 -0.01 0.01 0 2.5])
 hold on,
+
 
 
 %for wedge
@@ -30,6 +31,10 @@ hold on,
 %Z = [p1(3) p2(3) p3(3) p4(3)];
 %patch (X, Y, Z, 'r'); %wedge in red
 
+
+% Check if wedge exists:
+if (isfield(PROBE, 'WEDGE_SURFACE_POINT') || isfield(PROBE, 'WEDGE_SURFACE_NORMAL'))
+   
 
 % For each element
 for el = 1:num_el
