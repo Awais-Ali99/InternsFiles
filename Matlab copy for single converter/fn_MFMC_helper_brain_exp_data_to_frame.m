@@ -8,7 +8,7 @@ function [SEQUENCE]=fn_MFMC_helper_brain_exp_data_to_frame(exp_data,MFMC, SEQUEN
 
     FRAME.MFMC_DATA = exp_data.time_data;
     
-    conversion_factor=0.0125e-3;
+    conversion_factor= 0.0125e-3;
     
     if (length(varargin) > 0)
         conversion_factor=varargin{1};
