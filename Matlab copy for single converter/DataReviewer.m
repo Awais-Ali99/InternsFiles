@@ -4,7 +4,7 @@ close all;
 clc;
 
 % Choose which MFMC file to open:
-fname = uigetfile('*.mfmc');
+fname = 'DAVEWEDGEFIX.mfmc' %uigetfile('*.mfmc');
 
 
 %--------------------------------------------------------------------------
@@ -42,9 +42,9 @@ FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index)
 num_el = length(PROBE.ELEMENT_SHAPE);
 
 %% Set up initial menu to choose what do look at
-choose = questdlg('Do you want to look at the A-scans or the 3D probe image?',...
+choose = questdlg('Do you want to look at the A-scans or the 3D probe image or Compare your MFMC files?',...
 'Menu',... 
-'A-scans', '3D Image','A-scans');
+'A-scans', '3D Image', 'MFMC file Comparison', 'dnf');
 %% Plotting and data review segment:
 %
 % 
@@ -149,7 +149,26 @@ end
 
 %% Display 3D Image of Probe:
 %
+%
+%
+%
 if strcmp(choose,'3D Image') == 1 % If 3D image is chosen
-    fn_3D_image_plot(PROBE,num_el);
+    fn_3D_image_plot_new(PROBE,num_el);
 end
 
+%% MFMC File Comparison Section
+%
+%
+%
+%%Open the file and obtain Matlab MFMC structure variable for use in later
+%functions
+if strcmp(choose,'MFMC file Comparison') == 1 % If MFMC File Comparison are chosen:
+clc
+clear
+
+%Selected both files you want to compare    
+fname1 = 'wedge_converted.mfmc';
+fname2 = 'wedge_converted.mfmc'; %'COMPARE_LABVIEW.mfmc';
+
+fn_ComparisonMFMCtoMFMC (fname1,fname2)
+end
