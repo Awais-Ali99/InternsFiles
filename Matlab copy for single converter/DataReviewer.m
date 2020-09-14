@@ -23,19 +23,19 @@ for ii = 1:length(sequence_list)
     fprintf(['    ', sequence_list{ii}.name, '\n']);
 end
 %% 
-%Read data for 1st probe
+% Choose which probe to read:
 probe_index = 1;
 PROBE = fn_MFMC_read_probe(MFMC, probe_list{probe_index}.ref);
 fprintf('\nProbe %i details:\n', probe_index);
 disp(PROBE);
 
-%Read data for 1st sequence
+% Choose which sequence to read:
 sequence_index = 1;
 SEQUENCE = fn_MFMC_read_sequence(MFMC, sequence_list{sequence_index}.ref);
 fprintf('\nSequence %i details:\n', sequence_index);
 disp(SEQUENCE);
 
-% Get first frame of data
+% Choose which frame to read
 frame_index = 1;
 FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
 % Get number of elements
@@ -49,10 +49,13 @@ choose = questdlg('Do you want to look at the A-scans or the 3D probe image?',..
 %
 % 
 %
+%
+%
+
 if strcmp(choose,'A-scans') == 1 % If A-scans are chosen:
     modePlot = questdlg('What type of data representation do you want?',...
-	'Choose type: ', ...
-	'Rx for fixed Tx','Tx for fixed Rx','Same Tx and Rx','Rx for fixed Tx');
+    'Choose type: ', ...
+    'Rx for fixed Tx','Tx for fixed Rx','Same Tx and Rx','Rx for fixed Tx');
     error = 1;
     if strcmp(modePlot,'Rx for fixed Tx') == 1
         while error == 1 % run loop while input is wrong
@@ -71,7 +74,7 @@ if strcmp(choose,'A-scans') == 1 % If A-scans are chosen:
             end
             error = 0;
         end
-        fn_MFMC_plotAscans(modePlot,num_el,tx,MFMC,SEQUENCE,sequence_index,FRAME);
+        el = tx;
     elseif strcmp(modePlot,'Tx for fixed Rx') == 1
         while error == 1 % run loop while input is wrong
             inp = inputdlg('Choose fixed Rx: ','Rx',[1 35]);
@@ -89,12 +92,61 @@ if strcmp(choose,'A-scans') == 1 % If A-scans are chosen:
             end
             error = 0;
         end
-        fn_MFMC_plotAscans(modePlot,num_el,rx,MFMC,SEQUENCE,sequence_index,FRAME);
+        el = rx;
+
     elseif strcmp(modePlot,'Same Tx and Rx') == 1
         el = length(PROBE.ELEMENT_SHAPE);
-        fn_MFMC_plotAscans(modePlot,num_el,el,MFMC,SEQUENCE,sequence_index,FRAME);
+    end
+% Set up initial X and Y gaps for cascade plot
+
+xGap = 0.0781e-6;
+yGap = 0.02;
+% Infinite loop that restarts itself whenever the button to change gaps is
+% pressed
+while true
+    clf;
+    % call plotting function
+    fn_MFMC_plotAscans(xGap,yGap,modePlot,num_el,el,MFMC,SEQUENCE,sequence_index,FRAME);
+    fig = figure(1);
+    % Set up two controls for X and Y gap inputs, and one to confirm
+    %
+    %
+    button1 = uicontrol(fig,'Style','edit');
+    button1.String = num2str(xGap);
+    annotation('textbox',[0.0199,0.9247,0.0396,0.0358],'String','X gap:','FitBoxToText','on','EdgeColor','none');
+    button2 = uicontrol(fig,'Style','edit');
+    annotation('textbox',[0.0199,0.855265,0.03958,0.03579],'String','Y gap:','FitBoxToText','on','EdgeColor','none');
+    button2.String = num2str(yGap);
+    button3 = uicontrol(fig, 'Style', 'togglebutton', 'String', 'Change');
+    button1.Position = [30 670 100 20];
+    button2.Position = [30 615 100 20];
+    button3.Position = [30 560 100 20];
+    drawnow;
+    %
+    %
+    % Check to see if button is pressed:
+    while true
+        drawnow;
+        % If button is pressed restart the outside loop (to input new gaps)
+        if (get(button3, 'Value')==1); break; end
+    end
+    % Two if statements to check revert to default if no input is given
+    % for the X and Y Gaps
+    if (isempty(get(button1, 'String')) == 1)
+        xGap = 0.0781e-6;
+    else
+        % Otherwise save current inputs as X and Y gaps respectively.
+        xGap = str2num((get(button1, 'String')));
+    end
+    if (isempty(get(button2, 'String')) == 1)
+        yGap = 0.02;
+    else
+        yGap = str2num((get(button2, 'String')));
     end
 end
+pause(0.01);
+end
+
 %% Display 3D Image of Probe:
 %
 if strcmp(choose,'3D Image') == 1 % If 3D image is chosen
