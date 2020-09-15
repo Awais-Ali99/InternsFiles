@@ -5,7 +5,7 @@ clc;
 %
 %
 %% Set up initial menu to choose what do look at
-choose = questdlg('Do you want to look at the A-scans or the 3D probe image or Compare your MFMC files?',...
+choose = questdlg('Do you want to look at the A-scans, the 3D probe image or Compare your MFMC files?',...
 'Menu',... 
 'A-scans', '3D Image', 'MFMC file Comparison', 'dnf');
 %% MFMC File Comparison Section
@@ -62,52 +62,52 @@ FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index)
 
 %% Plotting and data review segment:
 %
-%  
-% Set up fig
-fig = figure('Name','A-scan Plots');
-% Following 3 lines maximise the figure in fullscreen
-% (otherwise the annotations and buttons get misplaced)
-pause(0.00001);
-frame_h = get(handle(gcf),'JavaFrame');
-set(frame_h,'Maximized',1);
+if strcmp(choose,'A-scans')  
+    % Set up fig
+    fig = figure('Name','A-scan Plots');
+    % Following 3 lines maximise the figure in fullscreen
+    % (otherwise the annotations and buttons get misplaced)
+    pause(0.00001);
+    frame_h = get(handle(gcf),'JavaFrame');
+    set(frame_h,'Maximized',1);
 
-% Create buttons for enetering X and Y gaps
-handles.button(1) = uicontrol(fig,'Style','edit');
-handles.button(2) = uicontrol(fig,'Style','edit');
-% Create buttons for choosing mode and changing the element for display
-handles.button(4) = uicontrol(fig,'Style','edit',...
-    'Max',length(PROBE.ELEMENT_SHAPE),'Min',1);
-handles.button(5) = uicontrol(fig,'Style','popupmenu',...
-    'String',{'Fixed Tx','Fixed Rx','Same Tx and Rx'});
-% Button to confirm changes and replot
-handles.button(3) = uicontrol(fig,'Style','pushbutton','String','Replot',...
-    'Callback',@(src,event)fn_MFMC_plotAscans(handles,...
-    MFMC,PROBE,SEQUENCE,sequence_index,FRAME));
+    % Create controls for entering X and Y gaps
+    handles.button(1) = uicontrol(fig,'Style','edit');
+    handles.button(2) = uicontrol(fig,'Style','edit');
+    % Create controls for choosing mode and changing the element for display
+    handles.button(4) = uicontrol(fig,'Style','edit',...
+        'Max',length(PROBE.ELEMENT_SHAPE),'Min',1);
+    handles.button(5) = uicontrol(fig,'Style','popupmenu',...
+        'String',{'Fixed Tx','Fixed Rx','Same Tx and Rx'});
+    % Button to confirm changes and replot (needs to be after other controls)
+    handles.button(3) = uicontrol(fig,'Style','pushbutton','String','Replot',...
+        'Callback',@(src,event)fn_MFMC_plotAscans(handles,...
+        MFMC,PROBE,SEQUENCE,sequence_index,FRAME));
 
 
-% Button positions:
-handles.button(1).Position = [30 670 100 20];
-handles.button(2).Position = [30 615 100 20];
-handles.button(3).Position = [30 440 100 20];
-handles.button(4).Position = [30 500 100 20];
-handles.button(5).Position = [30 560 100 20];
+    % Button positions:
+    handles.button(1).Position = [30 670 100 20];
+    handles.button(2).Position = [30 615 100 20];
+    handles.button(3).Position = [30 440 100 20];
+    handles.button(4).Position = [30 500 100 20];
+    handles.button(5).Position = [30 560 100 20];
 
-% Annotations for the buttons:
-annotation('textbox',[0.0017,0.9569,0.2016,0.0358],'String',...
-    'Enter X and Y gaps (leave empty for default)',...
-    'FitBoxToText','on','EdgeColor','none');
-annotation('textbox',[0.0162,0.914,0.0399,0.0346],'String','X gap:',...
-    'FitBoxToText','on','EdgeColor','none');
-annotation('textbox',[0.0162,0.8446,0.0399,0.0346],'String','Y gap:',...
-    'FitBoxToText','on','EdgeColor','none');
-annotation('textbox',[0.0162,0.7719,0.0399,0.0346],'String','Choose mode:',...
-    'FitBoxToText','on','EdgeColor','none');
-annotation('textbox',[0.0162,0.6929,0.08044,0.03579],'String','Choose element:',...
-    'FitBoxToText','on','EdgeColor','none');
+    % Annotations for the buttons:
+    annotation('textbox',[0.0017,0.9569,0.2016,0.0358],'String',...
+        'Enter X and Y gaps (leave empty for default)',...
+        'FitBoxToText','on','EdgeColor','none');
+    annotation('textbox',[0.0162,0.914,0.0399,0.0346],'String','X gap:',...
+        'FitBoxToText','on','EdgeColor','none');
+    annotation('textbox',[0.0162,0.8446,0.0399,0.0346],'String','Y gap:',...
+        'FitBoxToText','on','EdgeColor','none');
+    annotation('textbox',[0.0162,0.7719,0.0399,0.0346],'String','Choose mode:',...
+        'FitBoxToText','on','EdgeColor','none');
+    annotation('textbox',[0.0162,0.6929,0.08044,0.03579],'String','Choose element:',...
+        'FitBoxToText','on','EdgeColor','none');
 
-% run plotting function once to get the initial(default) plot
-fn_MFMC_plotAscans(handles,MFMC,PROBE,SEQUENCE,sequence_index,FRAME)
-
+    % run plotting function once to get the initial(default) plot
+    fn_MFMC_plotAscans(handles,MFMC,PROBE,SEQUENCE,sequence_index,FRAME)
+end
 
 %% Display 3D Image of Probe:
 %
