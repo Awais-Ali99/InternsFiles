@@ -24,8 +24,9 @@ end
 
 %% Load file for A-scans/3D image:
 % For A-scans and 3D image load the MFMC file you want
-fname = uigetfile('*.mfmc');
-
+if (strcmp(choose,'A-scans') || strcmp(choose,'3D Image'))
+    fname = uigetfile('*.mfmc');
+end
 % Open the MFMC file:
 MFMC = fn_MFMC_open_file(fname);
 
@@ -61,85 +62,52 @@ FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index)
 
 %% Plotting and data review segment:
 %
-% 
-%
-%
-if strcmp(choose,'A-scans') % If A-scans are chosen:
-    modePlot = questdlg('What type of data representation do you want?',...
-    'Choose type: ', ...
-    'Rx for fixed Tx','Tx for fixed Rx','Same Tx and Rx','Rx for fixed Tx');
-    error = 1;
-    if strcmp(modePlot,'Rx for fixed Tx') == 1
-        while error == 1 % run loop while input is wrong
-            inp = inputdlg('Choose fixed Tx: ','Tx',[1 35]);
-            tx = str2num(inp{1});
-            if tx ~= floor(tx)  % check if input is an integer
-                fprintf('Please enter an integer \n');
-                error = 1;
-                continue;
-
-            end
-            if tx > length(PROBE.ELEMENT_SHAPE) || tx < 1
-                fprintf('Enter a number between 1 and %.0f \n',length(PROBE.ELEMENT_SHAPE));
-                error = 1;
-                continue;
-            end
-            error = 0;
-        end
-        el = tx;
-    elseif strcmp(modePlot,'Tx for fixed Rx') == 1
-        while error == 1 % run loop while input is wrong
-            inp = inputdlg('Choose fixed Rx: ','Rx',[1 35]);
-            rx = str2num(inp{1});
-            if rx ~= floor(rx)
-                fprintf('Please enter an integer \n');
-                error = 1;
-                continue;
-
-            end
-            if rx > length(PROBE.ELEMENT_SHAPE) || rx < 1
-                fprintf('Enter a number between 1 and %.0f \n',length(PROBE.ELEMENT_SHAPE));
-                error = 1;
-                continue;
-            end
-            error = 0;
-        end
-        el = rx;
-
-    elseif strcmp(modePlot,'Same Tx and Rx') == 1
-        el = length(PROBE.ELEMENT_SHAPE);
-    end
-    
-    
+%  
 % Set up fig
-fig = figure('Name','A-scan plots','units','normalized','outerposition',[0 0 1 1]);
-% Create buttons for enetering X and Y gaps and to confirm and replot
+fig = figure('Name','A-scan Plots');
+% Following 3 lines maximise the figure in fullscreen
+% (otherwise the annotations and buttons get misplaced)
+pause(0.00001);
+frame_h = get(handle(gcf),'JavaFrame');
+set(frame_h,'Maximized',1);
+
+% Create buttons for enetering X and Y gaps
 handles.button(1) = uicontrol(fig,'Style','edit');
 handles.button(2) = uicontrol(fig,'Style','edit');
+% Create buttons for choosing mode and changing the element for display
+handles.button(4) = uicontrol(fig,'Style','edit',...
+    'Max',length(PROBE.ELEMENT_SHAPE),'Min',1);
+handles.button(5) = uicontrol(fig,'Style','popupmenu',...
+    'String',{'Rx for fixed Tx','Tx for fixed Rx','Same Tx and Rx'});
+% Button to confirm changes and replot
 handles.button(3) = uicontrol(fig,'Style','pushbutton','String','Replot',...
-    'Callback',@(src,event)fn_MFMC_plotAscans(handles,modePlot,num_el,el,...
-    MFMC,SEQUENCE,sequence_index,FRAME));
-% Create buttons for changing the displayed element A-scans
-% handles.button(4) = uicontrol(fig,'Style','edit');
-% handles.(button(5) = uicontrol(fig,'Style','pushbutton','String','Change element',...
-%     'Callback',@(src,event)fn_MFMC_plotAscans(handles,modePlot,num_el,el,...
-%     MFMC,SEQUENCE,sequence_index,FRAME));
+    'Callback',@(src,event)fn_MFMC_plotAscans(handles,...
+    MFMC,PROBE,SEQUENCE,sequence_index,FRAME));
+
+
+% Button positions:
 handles.button(1).Position = [30 670 100 20];
 handles.button(2).Position = [30 615 100 20];
-handles.button(3).Position = [30 560 100 20];
+handles.button(3).Position = [30 440 100 20];
+handles.button(4).Position = [30 500 100 20];
+handles.button(5).Position = [30 560 100 20];
+
 % Annotations for the buttons:
 annotation('textbox',[0.0017,0.9569,0.2016,0.0358],'String',...
     'Enter X and Y gaps (leave empty for default)',...
     'FitBoxToText','on','EdgeColor','none');
-annotation('textbox',[0.0199,0.9247,0.0396,0.0358],'String','X gap:',...
+annotation('textbox',[0.0162,0.914,0.0399,0.0346],'String','X gap:',...
     'FitBoxToText','on','EdgeColor','none');
-annotation('textbox',[0.0199,0.855265,0.03958,0.03579],'String','Y gap:',...
+annotation('textbox',[0.0162,0.8446,0.0399,0.0346],'String','Y gap:',...
+    'FitBoxToText','on','EdgeColor','none');
+annotation('textbox',[0.0162,0.7719,0.0399,0.0346],'String','Choose mode:',...
+    'FitBoxToText','on','EdgeColor','none');
+annotation('textbox',[0.0162,0.6929,0.08044,0.03579],'String','Choose element:',...
     'FitBoxToText','on','EdgeColor','none');
 
 % run plotting function once to get the initial(default) plot
-fn_MFMC_plotAscans(handles,modePlot,num_el,el,...
-    MFMC,SEQUENCE,sequence_index,FRAME)
-end
+fn_MFMC_plotAscans(handles,MFMC,PROBE,SEQUENCE,sequence_index,FRAME)
+
 
 %% Display 3D Image of Probe:
 %
