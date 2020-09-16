@@ -16,9 +16,9 @@ fname = 'example mfmc file.mfmc';
 %CREATING FILE
 
 %If file already exists, delete it
-if exist(fname, 'file')
-    delete(fname);
-end
+% if exist(fname, 'file')
+%     delete(fname);
+% end
 
 %Create MFMC file and MFMC structure needed for subsequent functions (this
 %MFMC variable should not be altered)

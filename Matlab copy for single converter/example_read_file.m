@@ -14,7 +14,7 @@ clear
 %--------------------------------------------------------------------------
 %Open the file and obtain Matlab MFMC structure variable for use in later
 %functions
-fname = 'All_in_one_conversion.mfmc';
+fname = 'example mfmc file.mfmc';
 MFMC = fn_MFMC_open_file(fname);
 
 %Get lists of probes and sequences in file
@@ -46,7 +46,7 @@ frame_index = 1;
 FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
 
 %Read focal laws of 4096 A-scan in frame in first sequence
-ascan_index = 4096;
+ascan_index = 1;
 transmit_law = fn_MFMC_read_law(MFMC, SEQUENCE.TRANSMIT_LAW(ascan_index, :));
 receive_law = fn_MFMC_read_law(MFMC, SEQUENCE.RECEIVE_LAW(ascan_index, :));
 fprintf('\nTransmit law for A-scan %i in sequence %i:\n', ascan_index, sequence_index);
