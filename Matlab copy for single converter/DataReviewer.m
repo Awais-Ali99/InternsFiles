@@ -178,7 +178,7 @@ clear
 
 %Selected both files you want to compare    
 fname1 = 'wedge_converted.mfmc';
-fname2 = 'wedge_converted.mfmc'; %'COMPARE_LABVIEW.mfmc';
+fname2 = 'COMPARE_LABVIEW.mfmc';
 
 fn_ComparisonMFMCtoMFMC (fname1,fname2)
 end
