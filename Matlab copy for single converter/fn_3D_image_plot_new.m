@@ -68,7 +68,7 @@ end
 
 
 %% points defining wedge surface (PCS Y coordinate for surface point ~= 0 [SQUINT])
-if PROBE.WEDGE_SURFACE_POINT(2) ~= 0
+if PROBE.WEDGE_SURFACE_POINT(2) ~= 0;
 %finding angle of incidence in terms of x axis
 angle_incidence = atan (PROBE.WEDGE_SURFACE_NORMAL(1)/PROBE.WEDGE_SURFACE_NORMAL(3));
 
@@ -146,8 +146,12 @@ for el = 1:num_el
     X = [p1(1) p2(1) p3(1) p4(1)];
     Y = [p1(2) p2(2) p3(2) p4(2)];
     Z = [(m*(p1(1)) + height_vert) (m*(p2(1)) + height_vert) (m*(p3(1)) + height_vert) (m*(p4(1)) + height_vert)];
-    %Z = [p1(3) p2(3) p3(3) p4(3)];
-    patch(X, Y, Z, 'b');
+
+    if PROBE.WEDGE_SURFACE_POINT(2) ~= 0
+        Z = [(m_sa *Z(1) + height_vert) (m_sa *Z(2) + height_vert) (m_sa * Z(3) + height_vert) (m_sa*Z(4) + height_vert)];
+    end
+    
+patch(X, Y, Z, 'b');
     
 end   
     

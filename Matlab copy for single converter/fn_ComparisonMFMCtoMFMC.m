@@ -59,8 +59,8 @@ disp(SEQUENCE2);
 frame_index = 1;
 FRAME2 = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
 
-float_count = isfloat(FRAME2)
-if float_count == 1
+float_count2 = isfloat(FRAME2);
+if float_count2 == 1
 FRAME2 = ceil(FRAME2 * 32768);
 end
 
@@ -73,49 +73,38 @@ choose = questdlg('Do you want to perform a full comparison of the MFMC files or
 'Menu', 'Full Comparison','MFMC-DATA', 'Cancel');
 
 %% Full Comparison Section
+% Buttons presented for the type of comparison desired by the user
 if strcmp(choose,'Full Comparison') == 1 % If Full Comparison is chosen:
 % PROBE CHECK
 error_flag_p = 0;
 
 %-------------------------------------------------------------------------------------
-
 %PROBE COMPARISON
-
+%PROBE Datagroup comparison section
 %Probe Element_position check
  if (PROBE1.ELEMENT_POSITION(:)) ~= (PROBE2.ELEMENT_POSITION(: ));
      error_flag_p = 1;
  end
- 
-
  %Probe Shape check
-if (PROBE1.ELEMENT_SHAPE(:)) ~= (PROBE2.ELEMENT_SHAPE(:))
+ if (PROBE1.ELEMENT_SHAPE(:)) ~= (PROBE2.ELEMENT_SHAPE(:))
      error_flag_p = 2;
-end
-
-
+ end
  %Probe element_major check
  if (PROBE1.ELEMENT_MAJOR(:)) ~= (PROBE2.ELEMENT_MAJOR(:))
      error_flag_p = 3;
  end
-
-
  %Probe centre frequency check
  if PROBE1.CENTRE_FREQUENCY ~= PROBE2.CENTRE_FREQUENCY
  error_flag_p = 4;
  end
- 
  %Probe element_minor check
  if (PROBE1.ELEMENT_MINOR(:)) ~= (PROBE2.ELEMENT_MINOR(:))
      error_flag_p = 5;
  end
- 
- 
   %Probe element_minor check
  if (PROBE1.TYPE) ~= (PROBE2.TYPE)
      error_flag_p = 6;
  end
- 
-
 if error_flag_p == 0;
     fprintf('PROBE Verification pass\n');
 else
@@ -126,17 +115,16 @@ end
 % Sequence Check
 
 error_flag_s = 0;
-
-
 %sequence Probe_list check
 if (SEQUENCE1.PROBE_LIST(:)) ~= (SEQUENCE2.PROBE_LIST(:));
     error_flag_s = 1;
 end
 
-
 %Recieve and Transmit Array creation and Comparison
-for n = 1: 4096  %will need adjusting based on number of ASCANS
-
+%The Transmit and Recieve Law arrays may be found in uint8 form
+%code hence required conversion to integer formcla.
+for n = 1: 4096  % LOOP will need adjusting based on number of ASCANS in MFMC files being tested
+    
 %MFMC 1 FILE LAW ARRAY CREATION
 RECEIVE1_LAW_SOLVED(n) = SEQUENCE1.RECEIVE_LAW(n, 8)*(256^7) + SEQUENCE1.RECEIVE_LAW(n, 7)*(256^6) + SEQUENCE1.RECEIVE_LAW(n, 6)*(256^5) +SEQUENCE1.RECEIVE_LAW(n, 5)*(256^4) + SEQUENCE1.RECEIVE_LAW(n, 4)*(256^3) +SEQUENCE1.RECEIVE_LAW(n, 3)*(256^2) +SEQUENCE1.RECEIVE_LAW(n, 2)*(256^1) +SEQUENCE1.RECEIVE_LAW(n, 1)*(256^0);
 TRANSMIT1_LAW_SOLVED(n)= SEQUENCE1.TRANSMIT_LAW(n, 8)*(256^7) + SEQUENCE1.TRANSMIT_LAW(n, 7)*(256^6) + SEQUENCE1.TRANSMIT_LAW(n, 6)*(256^5) +SEQUENCE1.TRANSMIT_LAW(n, 5)*(256^4) + SEQUENCE1.TRANSMIT_LAW(n, 4)*(256^3) +SEQUENCE1.TRANSMIT_LAW(n, 3)*(256^2) +SEQUENCE1.TRANSMIT_LAW(n, 2)*(256^1) +SEQUENCE1.TRANSMIT_LAW(n, 1)*(256^0);
@@ -146,57 +134,45 @@ RECEIVE2_LAW_SOLVED(n) = SEQUENCE2.RECEIVE_LAW(n, 8)*(256^7) + SEQUENCE2.RECEIVE
 TRANSMIT2_LAW_SOLVED(n)= SEQUENCE2.TRANSMIT_LAW(n, 8)*(256^7) + SEQUENCE2.TRANSMIT_LAW(n, 7)*(256^6) + SEQUENCE2.TRANSMIT_LAW(n, 6)*(256^5) +SEQUENCE2.TRANSMIT_LAW(n, 5)*(256^4) + SEQUENCE2.TRANSMIT_LAW(n, 4)*(256^3) +SEQUENCE2.TRANSMIT_LAW(n, 3)*(256^2) +SEQUENCE2.TRANSMIT_LAW(n, 2)*(256^1) +SEQUENCE2.TRANSMIT_LAW(n, 1)*(256^0);
 end
 
-if RECEIVE1_LAW_SOLVED(:) ~= RECEIVE2_LAW_SOLVED(:);
+if RECEIVE1_LAW_SOLVED(:) ~= RECEIVE2_LAW_SOLVED(:)
     error_flag_s = 2;
-end
-    
-if TRANSMIT1_LAW_SOLVED(:) ~= TRANSMIT2_LAW_SOLVED(:);
+end   
+if TRANSMIT1_LAW_SOLVED(:) ~= TRANSMIT2_LAW_SOLVED(:)
     error_flag_s = 3;
 end
-
 
 %sequence Probe_Placment check
 if (SEQUENCE1.PROBE_PLACEMENT_INDEX(:)) ~= (SEQUENCE2.PROBE_PLACEMENT_INDEX(:));
     error_flag_s = 4;
 end
-
-
 %sequence Probe_Position check
 if SEQUENCE1.PROBE_POSITION (:) ~= SEQUENCE2.PROBE_POSITION (:)
      error_flag_s = 5;
 end
-
 %sequence Probe_X_Direction check
 if SEQUENCE1.PROBE_X_DIRECTION(:) ~= SEQUENCE2.PROBE_X_DIRECTION(:)
      error_flag_s = 6;
 end
-
-
 %sequence Probe_Y_Direction check
 if SEQUENCE1.PROBE_Y_DIRECTION (:) ~= SEQUENCE2.PROBE_Y_DIRECTION (:)
     error_flag_s = 7;
 end
-
 %sequence TYPE check
 if SEQUENCE1.TYPE ~= SEQUENCE2.TYPE
     error_flag_s = 8;
 end
-
 %sequence TIME_STEP check
 if SEQUENCE1.TIME_STEP ~= SEQUENCE2.TIME_STEP
     error_flag_s = 9;
 end
-
 %sequence Start_time check
 if SEQUENCE1.START_TIME ~= SEQUENCE2.START_TIME
     error_flag_s = 10;
 end
-
 %sequence Specimen_velocity check
 if SEQUENCE1.SPECIMEN_VELOCITY ~= SEQUENCE2.SPECIMEN_VELOCITY
     error_flag_s = 11;
 end
-
 
 if error_flag_s == 0;
     fprintf('SEQUENCE Verification pass\n');
@@ -205,18 +181,28 @@ else
 end
 
 % Frame Check
-if FRAME1(:) == FRAME2 (:);
+
+ABSFRAME = FRAME1 - FRAME2;
+if ABSFRAME <= 1
 fprintf('FRAME Verificaton PASS\n');
 else fprintf('error in MFMC_DATA values\n')
+end
+
+
+if error_flag_s == 0 && error_flag_s == 0
+    msgbox('Operation Completed, Complete Verfication pass, all datasets and attributes are the same');
+else
+    msgbox('Operation Completed, Verfication failed, check command window');
 end
 end
 %---------------------------------------------------------------------------
 % MFMC_DATA Section
 if strcmp(choose,'MFMC-DATA') == 1 % If only MFMC comparison is chosen:
     % Frame Check
-if FRAME1(:) == FRAME2 (:);
-fprintf('FRAME Verificaton PASS\n');
-else fprintf('error in MFMC_DATA values\n')
+ABSFRAME = FRAME1 - FRAME2;
+if ABSFRAME <= 1
+msgbox('FRAME Verificaton PASS\n');
+else msgbox('error in MFMC_DATA values\n')
 end
 end
 end

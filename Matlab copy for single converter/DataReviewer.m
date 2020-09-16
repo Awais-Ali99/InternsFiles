@@ -124,5 +124,4 @@ if strcmp(choose,'3D Image') % If 3D image is chosen
     num_el = length(PROBE.ELEMENT_SHAPE);
     fn_3D_image_plot_new(PROBE,num_el);
 end
-%
-%
+
