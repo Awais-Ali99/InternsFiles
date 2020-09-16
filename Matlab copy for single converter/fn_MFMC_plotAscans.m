@@ -26,10 +26,10 @@ set(handles.button(2),'String',yGap);
 % Get value of chosen mode (1 = Fixed Tx, 2 = Fixed Rx, 3 = Same Tx/Rx)
 modePlot = get(handles.button(5),'Value');
 
-probe_index = str2double(get(handles.button(6),'String'));
+probe_index = get(handles.button(6),'Value');
 PROBE = fn_MFMC_read_probe(MFMC, probe_list{probe_index}.ref);
 
-sequence_index = str2double(get(handles.button(7),'String'));
+sequence_index = get(handles.button(7),'Value');
 SEQUENCE = fn_MFMC_read_sequence(MFMC, sequence_list{sequence_index}.ref);
 
 % Try/catch while loop to determine the number of frames in this sequence
@@ -54,22 +54,11 @@ frame_index = str2double(get(handles.button(8),'String'));
 FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
 
 num_el = length(PROBE.ELEMENT_SHAPE);
-% Set the maximum limit in the elements control to the nr. of elements
-set(handles.button(4),'Max',num_el);
+el = get(handles.button(4),'Value');
+ 
+% Update the choose element dropdown menu:
+set(handles.button(4),'String',{num2str((1:1:num_el)')});
 drawnow;
-if (isempty(get(handles.button(4), 'String')) || strcmp(get(handles.button(4), 'String'),'-'))
-    el = 1;
-else
-    el = str2double(get(handles.button(4), 'String'));
-    if el~=floor(el)
-        error('Element number not an integer!');
-    elseif (el < 1 || el > num_el)
-        error('Element number must be between 1 and %d',num_el);
-    end
-end
-% Update edit field:
-set(handles.button(4),'String',el);
-drawnow;  
 %% Main Plotting script
 % set A-scan counter i to 0, this tracks which relative A-scan you are on 
 % (e.g. 1st,2nd,etc. all the way to 64th, regardless of what actual A-scan
