@@ -58,16 +58,16 @@ if strcmp(choose,'A-scans')
     handles.button(1) = uicontrol(fig,'Style','edit');
     handles.button(2) = uicontrol(fig,'Style','edit');
     % Create controls for choosing mode and changing the element for display
-    handles.button(4) = uicontrol(fig,'Style','edit',...
-        'Max',1,'Min',1);
+    handles.button(4) = uicontrol(fig,'Style','popupmenu');
+    handles.button(4).String = {num2str(1)};
     handles.button(5) = uicontrol(fig,'Style','popupmenu',...
         'String',{'Fixed Tx','Fixed Rx','Same Tx and Rx'});
-    
+    % Create controls for Probe, Sequence and Frame selection
     handles.button(6) = uicontrol(fig,'Style','popupmenu');
-    handles.button(6).String = {num2str(1:1:length(probe_list))};
+    handles.button(6).String = {num2str((1:1:length(probe_list))')};
     
     handles.button(7) = uicontrol(fig,'Style','popupmenu');
-    handles.button(7).String = {num2str(1:1:length(sequence_list))};
+    handles.button(7).String = {num2str((1:1:length(sequence_list))')};
     
     handles.button(8) = uicontrol(fig,'Style','popupmenu');
     handles.button(8).String = {num2str(1)};

@@ -3,11 +3,11 @@ close all; clear all; clc;
 
 %Name of MFMC file to create
 fname = 'try.mfmc';
-
-if exist(fname, 'file')
-     delete(fname);
-     disp('File deleted')
- end
+% 
+% if exist(fname, 'file')
+%      delete(fname);
+%      disp('File deleted')
+%  end
 
 %Create MFMC file and MFMC structure needed for subsequent functions (this
 %MFMC variable should not be altered)
