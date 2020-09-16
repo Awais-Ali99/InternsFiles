@@ -24,9 +24,11 @@ disp(SEQUENCE1);
 frame_index = 1;
 FRAME1 = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
 %CHECK IF DATA FOR FRAME IS INTEGER
-%if FRAME1 ~= floor(FRAME1);
+if FRAME1 == floor(FRAME1);
+    FRAME1 = FRAME1;
+else
 FRAME1 = ceil(FRAME1 * 32768);
-%end
+end
 
 SEQUENCE1.RECEIVE_LAW = int64(SEQUENCE1.RECEIVE_LAW)
 SEQUENCE1.TRANSMIT_LAW = int64(SEQUENCE1.TRANSMIT_LAW)
@@ -59,7 +61,9 @@ frame_index = 1;
 FRAME2 = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
 
 %INTEGER CHECK FOR FRAME 2
-if FRAME2 ~= floor (FRAME2)
+if FRAME2 == floor (FRAME2)
+    FRAME2 = FRAME2;
+else
 FRAME2 = ceil(FRAME2 * 32768);
 end
 
