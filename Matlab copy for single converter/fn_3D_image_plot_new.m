@@ -17,7 +17,6 @@ if PROBE.WEDGE_SURFACE_POINT(2) == 0
 %finding angle of incidence in terms of x axis
 angle_incidence = atan (PROBE.WEDGE_SURFACE_NORMAL(1)/PROBE.WEDGE_SURFACE_NORMAL(3));
 
-
 %For vertical height from wedge base to surface point
 height_vert = cos(angle_incidence) * PROBE.WEDGE_SURFACE_POINT(3);
 
@@ -28,8 +27,6 @@ m = tan(-angle_incidence);
 %using pythagorous
 x_wedge_point = height_vert * tan(-angle_incidence);
 
-
-
 %Prepandicular line (vertical HEIGHT line)
 A=[0,0,0];
 B=[0,0,height_vert];
@@ -37,8 +34,6 @@ X = [A(1), B(1)];
 Y = [A(2), B(2)];
 Z = [A(3),B(3)];
 line(X,Y,Z);
-
-
 
 %LINE TO INTERSECTION POINT (PREPANDICULAR TO PROBE)
 A=[0,0,height_vert];
@@ -48,13 +43,9 @@ Y = [A(2), B(2)];
 Z = [A(3),B(3)];
 line(X,Y,Z);
 
-
-%So far ive plotted an assumed wedge surface at a vertical distance of the
-%wedge surface point [angled]
-%These dimensions are adjustable and are purely to improve the display of
+%These dimensions represent the wedge surface, are adjustable and are purely to improve the display of
 %the elements
-%Simply adjust the coordinates as deemend neceassary or comment out if
-%unneeded
+%Simply adjust the coordinates as deemend neceassary or comment out if unneeded
 p1 = [-0.02 -0.006 height_vert];
 p2 = [-0.02 0.006 height_vert];
 p3 = [0.02 0.006 height_vert];
@@ -95,8 +86,6 @@ Y = [A(2), B(2)];
 Z = [A(3),B(3)];
 line(X,Y,Z);
 
-
-
 %LINE TO INTERSECTION POINT (PREPANDICULAR TO PROBE)
 A=[0,0,height_vert];
 B=[x_wedge_point,y_wedge_point,0];
@@ -106,12 +95,9 @@ Z = [A(3),B(3)];
 line(X,Y,Z);
 
 
-%So far ive plotted an assumed wedge surface at a vertical distance of the
-%wedge surface point [angled]
-%These dimensions are adjustable and are purely to improve the display of
+%These dimensions represent the wedge surface, are adjustable and are purely to improve the display of
 %the elements
-%Simply adjust the coordinates as deemend neceassary or comment out if
-%unneeded
+%Simply adjust the coordinates as deemend neceassary or comment out if unneeded
 p1 = [-0.02 -0.006 height_vert];
 p2 = [-0.02 0.006 height_vert];
 p3 = [0.02 0.006 height_vert];
