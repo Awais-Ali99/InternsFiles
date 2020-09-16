@@ -42,10 +42,6 @@ for ii = 1:length(sequence_list)
     fprintf(['    ', sequence_list{ii}.name, '\n']);
 end
 
-
-
-
-
 %% Plotting and data review segment:
 %
 % Set some dummy value for initial num_el (for the button(4) setup)
