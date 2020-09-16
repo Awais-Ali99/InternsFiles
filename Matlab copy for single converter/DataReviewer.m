@@ -49,7 +49,6 @@ end
 %% Plotting and data review segment:
 %
 % Set some dummy value for initial num_el (for the button(4) setup)
-num_el = 1;
 if strcmp(choose,'A-scans')  
     % Set up fig
     fig = figure('Name','A-scan Plots');
@@ -64,7 +63,7 @@ if strcmp(choose,'A-scans')
     handles.button(2) = uicontrol(fig,'Style','edit');
     % Create controls for choosing mode and changing the element for display
     handles.button(4) = uicontrol(fig,'Style','edit',...
-        'Max',num_el,'Min',1);
+        'Max',1,'Min',1);
     handles.button(5) = uicontrol(fig,'Style','popupmenu',...
         'String',{'Fixed Tx','Fixed Rx','Same Tx and Rx'});
     
