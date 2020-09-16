@@ -1,25 +1,23 @@
-function fn_MFMC_plotAscans(handles,MFMC,PROBE,SEQUENCE,sequence_index,FRAME)
-
-num_el = length(PROBE.ELEMENT_SHAPE);
+function fn_MFMC_plotAscans(handles,MFMC,probe_list,sequence_list)
 % Set what X and Y gaps you want as default:
 xGap_def = 0.0781e-6;
 yGap_def = 0.02;
 
 % Clear axes
 cla;
-
+%% Allocate variables from handles
 % Two if statements to check revert to default if the button fields are
 % empty
 if isempty(get(handles.button(1), 'String'))
     xGap = xGap_def;
 else
     % Otherwise save current inputs as X and Y gaps respectively.
-    xGap = str2num(get(handles.button(1), 'String'));
+    xGap = str2double(get(handles.button(1), 'String'));
 end
 if isempty(get(handles.button(2), 'String'))
     yGap = yGap_def;
 else
-    yGap = str2num(get(handles.button(2), 'String'));
+    yGap = str2double(get(handles.button(2), 'String'));
 end
 % Update the edit fields on figure window:
 set(handles.button(1),'String',xGap);
@@ -29,7 +27,7 @@ set(handles.button(2),'String',yGap);
 if (isempty(get(handles.button(4), 'String')) || strcmp(get(handles.button(4), 'String'),'-'))
     el = 1;
 else
-    el = str2num(get(handles.button(4), 'String'));
+    el = str2double(get(handles.button(4), 'String'));
 end
 % Update edit field:
 set(handles.button(4),'String',el);
@@ -37,8 +35,44 @@ drawnow;
 % Get value of chosen mode (1 = Fixed Tx, 2 = Fixed Rx, 3 = Same Tx/Rx)
 modePlot = get(handles.button(5),'Value');
 
-% set A-scan counter to 0, this tracks which relative A-scan you are on 
-% (e.g. 1st,2nd,etc. all the way to 64th)
+probe_index = str2double(get(handles.button(6),'String'));
+PROBE = fn_MFMC_read_probe(MFMC, probe_list{probe_index}.ref);
+
+sequence_index = str2double(get(handles.button(7),'String'));
+SEQUENCE = fn_MFMC_read_sequence(MFMC, sequence_list{sequence_index}.ref);
+
+% Try/catch while loop to determine the number of frames in the MFMC file
+% The loop stops when the frame_index it tries to read doesn't exist
+err = 0;
+counter = 0;
+while err == 0
+    try 
+        counter = counter+1;
+        FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, counter);
+    catch
+        'MATLAB:The index arguments exceed the size of the dataset.';
+        frame_number = counter-1;
+        disp(frame_number)
+        err = 1;
+    end
+end
+% Populate the Frame dropdown control with the number of frames
+set(handles.button(8),'String',{num2str((1:1:frame_number)')});
+
+frame_index = str2double(get(handles.button(8),'String'));
+FRAME = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
+
+num_el = length(PROBE.ELEMENT_SHAPE);
+% Set the maximum limit in the elements control to the nr. of elements
+set(handles.button(4),'Max',num_el);
+drawnow;
+
+
+
+%% Main Plotting script
+% set A-scan counter i to 0, this tracks which relative A-scan you are on 
+% (e.g. 1st,2nd,etc. all the way to 64th, regardless of what actual A-scan
+%  it is, e.g. 4095th,4096th,etc.)
 i = 0;    
 if modePlot == 1
     % for loop from first to last A-scan for particular fixed transmitter
