@@ -1,13 +1,22 @@
 %% BRAIN to MFMC Conversion Script
+%
+% This script combined the FIToolbox to BRAIN and BRAIN to MFMC converters
+% and also allows for the conversion of laser-obtained data to MFMC
+% (through the fn_laser_convert.m function)
+% You need to set up the name of the MFMC file you want to create (fname),
+% as well as the name of the ultrasound (fname_raw) or laser (fname_laser)
+% data that you want to convert.
+%
+%
 close all; clear all; clc;
 
 %Name of MFMC file to create
-fname = 'try.mfmc';
+fname = 'laser2.mfmc';
 % 
-% if exist(fname, 'file')
-%      delete(fname);
-%      disp('File deleted')
-%  end
+if exist(fname, 'file')
+     delete(fname);
+     disp('File deleted')
+ end
 
 %Create MFMC file and MFMC structure needed for subsequent functions (this
 %MFMC variable should not be altered)
@@ -17,9 +26,10 @@ MFMC = fn_MFMC_open_file(fname);
 %File loaded as required test file
 fname_rawdata= '2FRD';
 fname_laser = '130320_Aluminium_FMC_LIPA';
+
 dataType = questdlg('What type of data do you want to convert? ',...
 'Menu',... 
-'Ultrasound (from .png and .cfg)', 'Laser (from .mat)','Ultrasound (from .png and .cfg)');   
+'Ultrasound (from .png and .cfg)', 'Laser (from .mat)','dnf');   
 
 if strcmp(dataType,'Ultrasound (from .png and .cfg)') == 1
     exp_data = fn_ds_convert(fname_rawdata);

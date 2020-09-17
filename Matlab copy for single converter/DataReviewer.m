@@ -1,4 +1,17 @@
 %% DATA REVIEWER SCRIPT
+%
+% This is the main script for the data reviewing tool. You can choose
+% whether to see the a-scan plotter, the 3D image display or to compare two
+% different MFMC files
+%
+% For the A-scan plotter this script sets up the various buttons and input
+% textboxes for the A-scan UI - in the handle.button(i) structure. You
+% don't need to set any variables in this script, however some default
+% values might be changed from within the fn_MFMC_plotAscans.m function.
+%
+% 
+%
+%
 clear all;
 close all;
 clc;
@@ -57,14 +70,16 @@ if strcmp(choose,'A-scans')
     % Create controls for entering X and Y gaps
     handles.button(1) = uicontrol(fig,'Style','edit');
     handles.button(2) = uicontrol(fig,'Style','edit');
-    % Create controls for choosing mode and changing the element for display
+    % Create control changing the element for display
     handles.button(4) = uicontrol(fig,'Style','popupmenu');
     handles.button(4).String = {num2str(1)};
+    % Create control for choosing display mode
     handles.button(5) = uicontrol(fig,'Style','popupmenu',...
         'String',{'Fixed Tx','Fixed Rx','Same Tx and Rx'});
     % Create controls for Probe, Sequence and Frame selection
     handles.button(6) = uicontrol(fig,'Style','popupmenu');
     handles.button(6).String = {num2str((1:1:length(probe_list))')};
+    
     
     handles.button(7) = uicontrol(fig,'Style','popupmenu');
     handles.button(7).String = {num2str((1:1:length(sequence_list))')};

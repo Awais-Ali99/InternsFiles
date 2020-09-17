@@ -1,5 +1,15 @@
 function exp_data=fn_laser_convert(fname_laser,varargin)
-fname_laser = '130320_Aluminium_FMC_LIPA';
+% This function loads the raw laser-obtained data into MATLAB and converts
+% it into an exp_data struct - in the same format as fn_ds_convert.m does.
+% Some parameters (like pitch, width and centre frequency) are set up in 
+% the beginning of the function currently but the function could be updated 
+% to load them from the file if the file contains them.
+%
+% The mandatory input to this function is the name of the laser data file and
+% optionally the ph_velocity can be input (otherwise it's set to 3200);
+%
+%
+%
 load(fname_laser);
 % User Parameters:
 %
@@ -15,7 +25,9 @@ if nargin < 2
 else
     ph_vel = varargin{1};
 end
-
+% Find number of elements and also populate exp_data struct with time
+% array, FMC data and ph_vel array.
+% 
 num_el = sqrt(length(FMC));
 exp_data.time = time;
 exp_data.time_data = FMC.';

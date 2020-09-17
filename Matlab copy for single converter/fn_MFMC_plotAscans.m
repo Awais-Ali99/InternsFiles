@@ -1,4 +1,14 @@
 function fn_MFMC_plotAscans(handles,MFMC,probe_list,sequence_list)
+% This function contains the bulk of the calculations and operations
+% necessary for the plotting of the A-scans. Most values are directly
+% inherited from the Data Reviewer UI controls, but some default values
+% (like the default X and Y gaps) can be adjusted here.
+% The function uses 3 different for loops to plot the 3 different modes -
+% fixed tx, fixed rx and same tx/rx. The way each mode plots the A-scans is
+% explained in the comments above the for loops.
+
+
+
 % Set what X and Y gaps you want as default:
 xGap_def = 0.0781e-6;
 yGap_def = 0.02;
@@ -126,7 +136,7 @@ elseif modePlot == 3
         title(lbl);
     end
     fprintf('Fixed both \n');
-    % Update the element box (as it's not needed)
+    % Update the element box to '-' (as it's not needed for this mode)
     set(handles.button(4),'String','-');
 end
 drawnow;
