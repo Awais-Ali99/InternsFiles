@@ -9,7 +9,8 @@
 % don't need to set any variables in this script, however some default
 % values might be changed from within the fn_MFMC_plotAscans.m function.
 %
-% 
+% For the 3D image you need to choose which probe to display by changing
+% the probe_index in the 3D image section (at the bottom of the script)
 %
 %
 clear all;
@@ -25,8 +26,8 @@ choose = questdlg('Do you want to look at the A-scans, the 3D probe image or Com
 %
 %
 %
-%%Open the file and obtain Matlab MFMC structure variable for use in later
-%functions
+% Open the file and obtain Matlab MFMC structure variable for use in later
+% functions
 if strcmp(choose,'MFMC file Comparison') % If MFMC File Comparison are chosen:
     %Select both files you want to compare    
     fname1 = uigetfile('*.mfmc');
