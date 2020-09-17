@@ -23,9 +23,10 @@ disp(SEQUENCE1);
 %Get first frame of data in the 1st sequence
 frame_index = 1;
 FRAME1 = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
-
-float_count = isfloat(FRAME1)
-if float_count == 1;
+%CHECK IF DATA FOR FRAME IS INTEGER
+if FRAME1 == floor(FRAME1);
+    FRAME1 = FRAME1;
+else
 FRAME1 = ceil(FRAME1 * 32768);
 end
 
@@ -59,8 +60,10 @@ disp(SEQUENCE2);
 frame_index = 1;
 FRAME2 = fn_MFMC_read_frame(MFMC, sequence_list{sequence_index}.ref, frame_index);
 
-float_count2 = isfloat(FRAME2);
-if float_count2 == 1
+%INTEGER CHECK FOR FRAME 2
+if FRAME2 == floor (FRAME2)
+    FRAME2 = FRAME2;
+else
 FRAME2 = ceil(FRAME2 * 32768);
 end
 
@@ -78,7 +81,6 @@ if strcmp(choose,'Full Comparison') == 1 % If Full Comparison is chosen:
 % PROBE CHECK
 error_flag_p = 0;
 
-%-------------------------------------------------------------------------------------
 %PROBE COMPARISON
 %PROBE Datagroup comparison section
 %Probe Element_position check
@@ -108,10 +110,11 @@ error_flag_p = 0;
 if error_flag_p == 0;
     fprintf('PROBE Verification pass\n');
 else
-    fprintf('PROBE Verification fail check error_flag_p number ',error_flag_p,'\n');
+    fprintf('PROBE Verification fail error_flag_p number is \n ');
+    fprintf(error_flag_p);
 end
 
-%----------------------------------------------------------------------------------------
+
 % Sequence Check
 
 error_flag_s = 0;
@@ -122,7 +125,7 @@ end
 
 %Recieve and Transmit Array creation and Comparison
 %The Transmit and Recieve Law arrays may be found in uint8 form
-%code hence required conversion to integer formcla.
+%code hence required conversion to integer form before comparison
 for n = 1: 4096  % LOOP will need adjusting based on number of ASCANS in MFMC files being tested
     
 %MFMC 1 FILE LAW ARRAY CREATION
@@ -177,12 +180,13 @@ end
 if error_flag_s == 0;
     fprintf('SEQUENCE Verification pass\n');
 else
-    fprintf('SEQUENCE Verification fail check error_flag_p number',error_flag_p,'\n');
+    fprintf('SEQUENCE Verification fail error_flag_s number is\n');
+    fprintf(error_flag_p)
 end
 
 % Frame Check
 
-ABSFRAME = FRAME1 - FRAME2;
+ABSFRAME = abs(FRAME1 - FRAME2);
 if ABSFRAME <= 1
 fprintf('FRAME Verificaton PASS\n');
 else fprintf('error in MFMC_DATA values\n')
@@ -199,10 +203,10 @@ end
 % MFMC_DATA Section
 if strcmp(choose,'MFMC-DATA') == 1 % If only MFMC comparison is chosen:
     % Frame Check
-ABSFRAME = FRAME1 - FRAME2;
+ABSFRAME = abs(FRAME1 - FRAME2);
 if ABSFRAME <= 1
-msgbox('FRAME Verificaton PASS\n');
-else msgbox('error in MFMC_DATA values\n')
+msgbox('Operation Completed,FRAME Verificaton PASS');
+else msgbox('Operation Completed,error in MFMC_DATA values')
 end
 end
 end
