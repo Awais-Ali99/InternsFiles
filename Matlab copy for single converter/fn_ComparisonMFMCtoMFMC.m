@@ -1,4 +1,22 @@
 function fn_ComparisonMFMCtoMFMC (fname1,fname2)
+%% fn_ComparisonMFMCtoMFMC
+%
+% This code is designed to simply compare the complete probe and sequence
+% data structures of the two files to each other.
+
+% The UI will initially ask if a full comparison is required or if only the
+% MFMC_DATA is required to be compared.
+
+% It should be noted that this script assumed that if the FRAME_DATA [MFMC_DATA] is not
+% equal to the floor of the FRAME_DATA, the data is not integer based but
+% rather a floating point requiring multiplication by 32768 to convert to
+% integer [Hence adjust as appropriate]
+%
+%A messege box with the outcome of the comparison is displayed, 
+% The command window dsplays all steps of the check as well as the error
+% code
+
+
 %% PROBE 1 READING
 
 MFMC = fn_MFMC_open_file(fname1);

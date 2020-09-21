@@ -1,18 +1,35 @@
 function fn_3D_image_plot_new (PROBE,num_el)
-
-%PROBE.ELEMENT_MAJOR = [0 0.005 0];
-% Minor dimension is half of the width, i.e. from the centre of element to
-% the end, so creating seperate variable (_half)
-
-PROBE.ELEMENT_MINOR_HALF = PROBE.ELEMENT_MINOR/2;
-PROBE.ELEMENT_MINOR_HALF(1,:) = PROBE.ELEMENT_MINOR_HALF(1,:) - (0.5e-4); %Accounting for pitch can be adjusted
-PROBE_HEIGHT = 2;
+%% fn_3d_image_plot_new
+%
+% This function is entirely dedicated towards plotting the 3d wedge viewer,
+% the data used did not contain a squint angle however a seperate section
+% dedicated to having a squint angle can be found in this code as well.
+%
+% This code makes use of the Probe MFMC group and all datasets contained
+% within, this code also requires the two wedge based datasets in order for
+% the wedge to be plotted
+%
+% A user interface allowing the user to choose between a full 3d plot
+% (including the wedge) or a plot of simply plot the elements is hence found
+%
+% The 3D wedge plot is set to equal axis as a default, if bothersome the
+% equal axis may be commented out [indicated in the code]
+%
+%
+%
+%% Set up initial menu to choose what plot is required
 grid on
 axis([-0.035 0.035 -0.01 0.01 0 0.1])
+%axis([-0.035 0.035 -0.035 0.035 0 0.1])
 hold on,
+choose = questdlg('Would you like the  full 3d plot including the wedge or only the elements to be plotted?',...
+'Menu',... 
+'Wedge 3D-Plot', 'Elements-plot', 'dnf');
+
 
 
 %% points defining wedge surface (PCS Y coordinate for surface point = 0 [NO SQUINT])
+if strcmp(choose,'Wedge 3D-Plot')
 if PROBE.WEDGE_SURFACE_POINT(2) == 0
 %finding angle of incidence in terms of x axis
 angle_incidence = atan (PROBE.WEDGE_SURFACE_NORMAL(1)/PROBE.WEDGE_SURFACE_NORMAL(3));
@@ -55,6 +72,8 @@ Y = [p1(2) p2(2) p3(2) p4(2)];
 %Using z = mx + c to plot the varying z coordinates for the four points
 Z = [(m*(p1(1)) + height_vert) (m*(p2(1)) + height_vert) (m*(p3(1)) + height_vert) (m*(p4(1)) + height_vert)];
 patch(X, Y, Z, 'c');
+
+
 end
 
 
@@ -112,6 +131,8 @@ Z = [(m_ia*(p1(1)) + height_vert) (m_ia*(p2(1)) + height_vert) (m_ia*(p3(1)) + h
 %along the y axis
 Z = [(m_sa *Z(1) + height_vert) (m_sa *Z(2) + height_vert) (m_sa * Z(3) + height_vert) (m_sa*Z(4) + height_vert)];
 patch(X, Y, Z, 'c');
+
+
 end
     
 %% For each element
@@ -124,10 +145,10 @@ for el = 1:num_el
     
     % 4 points that define the size of each element
 
-    p1 = [x-PROBE.ELEMENT_MINOR_HALF(1,1) y-PROBE.ELEMENT_MAJOR(2,1) height_vert];
-    p2 = [x+PROBE.ELEMENT_MINOR_HALF(1,1) y-PROBE.ELEMENT_MAJOR(2,1) height_vert];
-    p3 = [x+PROBE.ELEMENT_MINOR_HALF(1,1) y+PROBE.ELEMENT_MAJOR(2,1) height_vert];
-    p4 = [x-PROBE.ELEMENT_MINOR_HALF(1,1) y+PROBE.ELEMENT_MAJOR(2,1) height_vert];
+    p1 = [x-PROBE.ELEMENT_MINOR(1,1) y-PROBE.ELEMENT_MAJOR(2,1) height_vert];
+    p2 = [x+PROBE.ELEMENT_MINOR(1,1) y-PROBE.ELEMENT_MAJOR(2,1) height_vert];
+    p3 = [x+PROBE.ELEMENT_MINOR(1,1) y+PROBE.ELEMENT_MAJOR(2,1) height_vert];
+    p4 = [x-PROBE.ELEMENT_MINOR(1,1) y+PROBE.ELEMENT_MAJOR(2,1) height_vert];
 
     X = [p1(1) p2(1) p3(1) p4(1)];
     Y = [p1(2) p2(2) p3(2) p4(2)];
@@ -137,8 +158,47 @@ for el = 1:num_el
         Z = [(m_sa *Z(1) + height_vert) (m_sa *Z(2) + height_vert) (m_sa * Z(3) + height_vert) (m_sa*Z(4) + height_vert)];
     end
     
-patch(X, Y, Z, 'b');
-    
+patch(X, Y, Z, 'k');
+
+xlabel('X Axis');
+ylabel('Y Axis');
+zlabel('Z Axis')
+lbl = '3D Probe viewer [Full 3D plot]';
+title(lbl);
+
+% COMMENT OUT this option if the 3d plot is bothersome with equal axis's
+%axis equal
+
 end   
+end
+
+%% Element only plot
+if strcmp(choose,'Elements-plot')
+for el = 1:num_el
     
+    % location of centre of each element:
+    x = PROBE.ELEMENT_POSITION(1,el);
+    y = PROBE.ELEMENT_POSITION(2,el);
+    z = PROBE.ELEMENT_POSITION(3,el);
+    
+    % 4 points that define the size of each element
+
+    p1 = [x-PROBE.ELEMENT_MINOR(1,1) y-PROBE.ELEMENT_MAJOR(2,1) 0];
+    p2 = [x+PROBE.ELEMENT_MINOR(1,1) y-PROBE.ELEMENT_MAJOR(2,1) 0];
+    p3 = [x+PROBE.ELEMENT_MINOR(1,1) y+PROBE.ELEMENT_MAJOR(2,1) 0];
+    p4 = [x-PROBE.ELEMENT_MINOR(1,1) y+PROBE.ELEMENT_MAJOR(2,1) 0];
+
+    X = [p1(1) p2(1) p3(1) p4(1)];
+    Y = [p1(2) p2(2) p3(2) p4(2)];
+    Z = [p1(3) p2(3) p3(3) p4(3)];
+    
+patch(X, Y, Z, 'c');
+
+xlabel('X Axis');
+ylabel('Y Axis');
+zlabel('Z Axis')
+lbl = '3D Probe viewer [Element only plot]';
+title(lbl);
+end
+
 end
